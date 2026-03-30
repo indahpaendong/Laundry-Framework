@@ -2,87 +2,430 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>LaundryGo - Admin Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LaundryGo - Cek Status</title>
 
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Icon -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 
     <style>
-        body {
-            background: linear-gradient(135deg, #4e73df, #6f42c1);
-            height: 100vh;
+        :root {
+            --pastel-yellow-light: #FFF9E6;
+            --pastel-yellow: #FFEEB3;
+            --pastel-yellow-medium: #FFE599;
+            --pastel-yellow-dark: #FFD966;
+            --text-primary: #5A4A42;
+            --text-secondary: #8B7355;
+            --white-soft: #FFFDF9;
+            --shadow-soft: 0 8px 32px rgba(90, 74, 66, 0.08);
+            --shadow-hover: 0 12px 40px rgba(90, 74, 66, 0.12);
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .login-card {
-            border-radius: 15px;
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--pastel-yellow-light) 0%, var(--pastel-yellow) 50%, var(--pastel-yellow-medium) 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Decorative background elements */
+        body::before,
+        body::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 217, 102, 0.15) 0%, transparent 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        body::before {
+            width: 400px;
+            height: 400px;
+            top: -100px;
+            right: -100px;
+        }
+
+        body::after {
+            width: 300px;
+            height: 300px;
+            bottom: -50px;
+            left: -50px;
+        }
+
+        /* Navbar */
+        .navbar {
+            padding: 1rem 0;
+            position: relative;
+            z-index: 10;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--text-primary) !important;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .navbar-brand i {
+            font-size: 1.4rem;
+            color: var(--pastel-yellow-dark);
+        }
+
+        .btn-admin {
+            background: var(--white-soft);
+            color: var(--text-primary);
+            border: 2px solid var(--pastel-yellow-dark);
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .btn-admin:hover {
+            background: var(--pastel-yellow-dark);
+            color: var(--text-primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* Main Content */
+        .main-content {
+            position: relative;
+            z-index: 10;
+            min-height: calc(100vh - 76px);
+            display: flex;
+            align-items: center;
+            padding: 2rem 0;
+        }
+
+        /* Tracking Card */
+        .tracking-card {
+            background: rgba(255, 253, 249, 0.85);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius-lg);
+            padding: 2.5rem 2rem;
+            max-width: 480px;
+            width: 100%;
+            margin: 0 auto;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid rgba(255, 233, 153, 0.6);
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .tracking-header {
+            margin-bottom: 2rem;
+        }
+
+        .tracking-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--pastel-yellow), var(--pastel-yellow-dark));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 8px 24px rgba(255, 217, 102, 0.3);
+        }
+
+        .tracking-icon i {
+            font-size: 2rem;
+            color: var(--text-primary);
+        }
+
+        .tracking-header h1 {
+            font-weight: 700;
+            font-size: 1.75rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .tracking-header p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        /* Form Styling */
+        .form-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-control {
+            background: var(--white-soft);
+            border: 2px solid var(--pastel-yellow-medium);
+            border-radius: var(--radius-md);
+            padding: 1rem 1.25rem;
+            font-size: 1rem;
+            color: var(--text-primary);
+            transition: var(--transition);
+            text-align: center;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .form-control::placeholder {
+            color: var(--text-secondary);
+            opacity: 0.7;
+            letter-spacing: 1px;
+            text-transform: none;
+        }
+
+        .form-control:focus {
+            background: var(--white-soft);
+            border-color: var(--pastel-yellow-dark);
+            box-shadow: 0 0 0 4px rgba(255, 217, 102, 0.15);
+            outline: none;
+            transform: translateY(-1px);
+        }
+
+        .btn-track {
+            background: linear-gradient(135deg, var(--pastel-yellow-dark), var(--pastel-yellow-medium));
+            color: var(--text-primary);
+            border: none;
+            border-radius: 50px;
+            padding: 1rem;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+            box-shadow: 0 4px 16px rgba(255, 217, 102, 0.25);
+        }
+
+        .btn-track:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+            background: linear-gradient(135deg, var(--pastel-yellow-medium), var(--pastel-yellow-dark));
+        }
+
+        .btn-track:active {
+            transform: translateY(-1px);
+        }
+
+        /* Helper Text */
+        .helper-text {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px dashed var(--pastel-yellow-medium);
+        }
+
+        .helper-text small {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .helper-text code {
+            background: var(--pastel-yellow);
+            color: var(--text-primary);
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 0.8rem;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 1.5rem;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .footer a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 576px) {
+            .tracking-card {
+                padding: 2rem 1.5rem;
+                margin: 1rem;
+            }
+            
+            .tracking-header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .tracking-icon {
+                width: 70px;
+                height: 70px;
+            }
+            
+            .tracking-icon i {
+                font-size: 1.75rem;
+            }
+        }
+
+        /* Loading animation for button */
+        .btn-track.loading {
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        .btn-track.loading i {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
 
-<body class="d-flex justify-content-center align-items-center">
+<body>
 
-<div class="card login-card shadow-lg p-4" style="width: 380px;">
-    
-    <!-- Title -->
-    <div class="text-center mb-4">
-        <h3 class="fw-bold">LaundryGo</h3>
-        <p class="text-muted">Admin Login</p>
-    </div>
-
-    <!-- Form -->
-    <form id="loginForm">
-        
-        <!-- Email -->
-        <div class="mb-3">
-            <label class="form-label">Email</label>
-            <div class="input-group">
-                <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                <input type="email" class="form-control" id="email" placeholder="admin@gmail.com" required>
-            </div>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="bi bi-basket2-fill"></i>
+                LaundryGo
+            </a>
+            <a href="login.html" class="btn btn-admin">
+                <i class="bi bi-person-lock"></i>
+                Admin
+            </a>
         </div>
+    </nav>
 
-        <!-- Password -->
-        <div class="mb-3">
-            <label class="form-label">Password</label>
-            <div class="input-group">
-                <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                <input type="password" class="form-control" id="password" placeholder="••••••••" required>
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            
+            <div class="tracking-card">
+                <!-- Icon Header -->
+                <div class="tracking-icon">
+                    <i class="bi bi-search-heart"></i>
+                </div>
+                
+                <!-- Header Text -->
+                <div class="tracking-header text-center">
+                    <h1>Cek Status Laundry</h1>
+                    <p>Masukkan kode unik yang diberikan oleh admin</p>
+                </div>
+
+                <!-- Form -->
+                <form id="trackingForm">
+                    <div class="form-group">
+                        <input 
+                            type="text" 
+                            id="kode" 
+                            class="form-control" 
+                            placeholder="LDY001" 
+                            pattern="[A-Za-z0-9]+"
+                            maxlength="10"
+                            autocomplete="off"
+                            required
+                            autofocus
+                        >
+                    </div>
+                    
+                    <button type="submit" class="btn btn-track" id="btnTrack">
+                        <i class="bi bi-search"></i>
+                        <span>Cek Status Sekarang</span>
+                    </button>
+                </form>
+
+                <!-- Helper -->
+                <div class="helper-text">
+                    <small>
+                        💡 Tips: Kode biasanya berbentuk <code>LDYxxx</code><br>
+                        Cek nota atau WhatsApp dari admin untuk menemukan kode Anda
+                    </small>
+                </div>
             </div>
+
         </div>
+    </main>
 
-        <!-- Button -->
-        <button type="submit" class="btn btn-primary w-100">
-            <i class="bi bi-box-arrow-in-right"></i> Login
-        </button>
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2024 LaundryGo. All rights reserved.<br>
+        <a href="help.html">Butuh bantuan?</a></p>
+    </footer>
 
-    </form>
+    <script>
+        document.getElementById("trackingForm").addEventListener("submit", function(e){
+            e.preventDefault();
+            
+            const btn = document.getElementById("btnTrack");
+            const kode = document.getElementById("kode").value.trim().toUpperCase();
+            const originalContent = btn.innerHTML;
+            
+            // Loading state
+            btn.classList.add("loading");
+            btn.innerHTML = '<i class="bi bi-hourglass-split"></i><span>Memproses...</span>';
+            
+            // Simulate processing & redirect
+            setTimeout(() => {
+                window.location.href = "hasil-tracking.html?kode=" + encodeURIComponent(kode);
+            }, 800);
+        });
 
-    <!-- Alert -->
-    <div id="alertBox" class="alert alert-danger mt-3 d-none">
-        Email atau password salah!
-    </div>
+        // Auto uppercase input
+        document.getElementById("kode").addEventListener("input", function(e) {
+            this.value = this.value.toUpperCase();
+        });
 
-</div>
-
-<script>
-    // Dummy login (frontend only)
-    document.getElementById("loginForm").addEventListener("submit", function(e){
-        e.preventDefault();
-
-        let email = document.getElementById("email").value;
-        let password = document.getElementById("password").value;
-
-        // akun dummy
-        if(email === "admin@gmail.com" && password === "12345"){
-            alert("Login berhasil!");
-            window.location.href = "admin-dashboard.html"; // redirect
-        } else {
-            document.getElementById("alertBox").classList.remove("d-none");
-        }
-    });
-</script>
+        // Smooth scroll behavior
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
 
 </body>
 </html>
