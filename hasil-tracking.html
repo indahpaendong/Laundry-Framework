@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hasil Tracking - LaundryGo</title>
 
-    <!-- Bootstrap -->
+    <!-- Bootstrap CSS ONLY (no JS) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -104,6 +104,7 @@
             display: flex;
             align-items: center;
             gap: 0.4rem;
+            text-decoration: none;
         }
 
         .btn-home:hover {
@@ -111,7 +112,6 @@
             color: var(--text-primary);
             transform: translateY(-2px);
             box-shadow: var(--shadow-hover);
-            text-decoration: none;
         }
 
         /* Main Content */
@@ -431,29 +431,6 @@
             transform: translateY(-3px);
         }
 
-        /* Not Found State */
-        .not-found {
-            text-align: center;
-            padding: 3rem 2rem;
-        }
-
-        .not-found i {
-            font-size: 4rem;
-            color: var(--pastel-yellow-medium);
-            margin-bottom: 1.5rem;
-            display: block;
-        }
-
-        .not-found h2 {
-            color: var(--text-primary);
-            margin-bottom: 1rem;
-        }
-
-        .not-found p {
-            color: var(--text-secondary);
-            margin-bottom: 2rem;
-        }
-
         /* Footer */
         .footer {
             text-align: center;
@@ -462,6 +439,16 @@
             font-size: 0.85rem;
             position: relative;
             z-index: 10;
+        }
+
+        .footer a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
         }
 
         /* Responsive */
@@ -482,23 +469,6 @@
             .timeline {
                 padding-left: 2rem;
             }
-        }
-
-        /* Loading State */
-        .loading {
-            text-align: center;
-            padding: 3rem;
-        }
-
-        .loading i {
-            font-size: 3rem;
-            color: var(--pastel-yellow-dark);
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -523,23 +493,17 @@
     <main class="main-content">
         <div class="container">
             
-            <!-- Loading State -->
-            <div id="loadingState" class="loading">
-                <i class="bi bi-hourglass-split"></i>
-                <p style="margin-top: 1rem; color: var(--text-secondary);">Memuat data pesanan...</p>
-            </div>
-
-            <!-- Result Content (Hidden by default) -->
-            <div id="resultContent" class="result-card" style="display: none;">
+            <!-- Result Content (STATIC - No JS) -->
+            <div class="result-card">
                 
                 <!-- Status Header -->
                 <div class="status-header">
-                    <div class="status-icon" id="statusIcon">
+                    <div class="status-icon processing">
                         <i class="bi bi-hourglass-split"></i>
                     </div>
-                    <h1 id="statusTitle">Sedang Diproses</h1>
-                    <p id="statusDesc">Laundry Anda sedang dalam proses pengerjaan</p>
-                    <div class="order-code" id="orderCode">LDY001</div>
+                    <h1>Sedang Diproses</h1>
+                    <p>Laundry Anda sedang dalam proses pengerjaan</p>
+                    <div class="order-code">LDY001</div>
                 </div>
 
                 <!-- Order Details -->
@@ -552,27 +516,27 @@
                         <div class="detail-grid">
                             <div class="detail-item">
                                 <div class="detail-label"><i class="bi bi-calendar"></i> Tanggal Masuk</div>
-                                <div class="detail-value" id="tanggalMasuk">15 Jan 2025</div>
+                                <div class="detail-value">15 Jan 2025</div>
                             </div>
                             <div class="detail-item">
                                 <div class="detail-label"><i class="bi bi-clock"></i> Jam</div>
-                                <div class="detail-value" id="jamMasuk">09:30 WIB</div>
+                                <div class="detail-value">09:30 WIB</div>
                             </div>
                             <div class="detail-item">
                                 <div class="detail-label"><i class="bi bi-basket"></i> Layanan</div>
-                                <div class="detail-value" id="layanan">Cuci Komplit</div>
+                                <div class="detail-value">Cuci Komplit</div>
                             </div>
                             <div class="detail-item">
                                 <div class="detail-label"><i class="bi bi-speedometer2"></i> Berat</div>
-                                <div class="detail-value" id="berat">3.5 Kg</div>
+                                <div class="detail-value">3.5 Kg</div>
                             </div>
                             <div class="detail-item">
                                 <div class="detail-label"><i class="bi bi-cash-coin"></i> Total Harga</div>
-                                <div class="detail-value" id="harga">Rp 35.000</div>
+                                <div class="detail-value">Rp 35.000</div>
                             </div>
                             <div class="detail-item">
                                 <div class="detail-label"><i class="bi bi-clock-history"></i> Estimasi Selesai</div>
-                                <div class="detail-value" id="estimasi">15 Jan 2025, 16:00</div>
+                                <div class="detail-value">15 Jan 2025, 16:00</div>
                             </div>
                         </div>
                     </div>
@@ -585,26 +549,26 @@
                         </div>
                         <div class="timeline-container">
                             <div class="timeline">
-                                <div class="timeline-item completed" id="step1">
+                                <div class="timeline-item completed">
                                     <div class="timeline-title">Pesanan Diterima</div>
                                     <div class="timeline-desc">Laundry telah diterima oleh admin</div>
-                                    <div class="timeline-time" id="time1">15 Jan 2025, 09:30</div>
+                                    <div class="timeline-time">15 Jan 2025, 09:30</div>
                                 </div>
-                                <div class="timeline-item completed" id="step2">
+                                <div class="timeline-item completed">
                                     <div class="timeline-title">Proses Pencucian</div>
                                     <div class="timeline-desc">Pakaian sedang dicuci</div>
-                                    <div class="timeline-time" id="time2">15 Jan 2025, 11:00</div>
+                                    <div class="timeline-time">15 Jan 2025, 11:00</div>
                                 </div>
-                                <div class="timeline-item active" id="step3">
+                                <div class="timeline-item active">
                                     <div class="timeline-title">Pengeringan & Setrika</div>
                                     <div class="timeline-desc">Pakaian sedang dikeringkan dan disetrika</div>
-                                    <div class="timeline-time" id="time3">Sedang berlangsung</div>
+                                    <div class="timeline-time">Sedang berlangsung</div>
                                 </div>
-                                <div class="timeline-item" id="step4">
+                                <div class="timeline-item">
                                     <div class="timeline-title">Siap Diambil</div>
                                     <div class="timeline-desc">Laundry sudah selesai dan siap diambil</div>
                                 </div>
-                                <div class="timeline-item" id="step5">
+                                <div class="timeline-item">
                                     <div class="timeline-title">Selesai</div>
                                     <div class="timeline-desc">Laundry telah diambil oleh customer</div>
                                 </div>
@@ -615,9 +579,8 @@
 
                 <!-- Action Buttons -->
                 <div class="action-buttons">
-                    <a href="https://wa.me/6281234567890?text=Halo%20LaundryGo,%20saya%20mau%20tanya%20order%20" 
+                    <a href="https://wa.me/6281234567890" 
                        class="btn-action btn-secondary-action" 
-                       id="btnWa"
                        target="_blank">
                         <i class="bi bi-whatsapp"></i>
                         Hubungi Admin
@@ -630,20 +593,6 @@
 
             </div>
 
-            <!-- Not Found State -->
-            <div id="notFoundState" class="result-card" style="display: none;">
-                <div class="not-found">
-                    <i class="bi bi-search"></i>
-                    <h2>Pesanan Tidak Ditemukan</h2>
-                    <p>Kode pesanan yang Anda masukkan tidak terdaftar dalam sistem kami.<br>
-                    Mohon periksa kembali kode pesanan Anda.</p>
-                    <a href="index.html" class="btn-action btn-primary-action" style="display: inline-flex;">
-                        <i class="bi bi-arrow-left"></i>
-                        Kembali ke Halaman Tracking
-                    </a>
-                </div>
-            </div>
-
         </div>
     </main>
 
@@ -652,170 +601,6 @@
         <p>© 2025 LaundryGo. All rights reserved.<br>
         <a href="#">Butuh bantuan?</a> | <a href="#">Hubungi Kami</a></p>
     </footer>
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Custom JS -->
-    <script>
-        // Data dummy untuk testing (nanti diganti dengan fetch dari database/API)
-        const dummyData = {
-            'LDY001': {
-                kode: 'LDY001',
-                status: 'processing', // pending, processing, completed, picked
-                nama: 'Budi Santoso',
-                telepon: '0812-3456-7890',
-                tanggalMasuk: '15 Jan 2025',
-                jamMasuk: '09:30 WIB',
-                layanan: 'Cuci Komplit + Setrika',
-                berat: '3.5 Kg',
-                harga: 'Rp 35.000',
-                estimasi: '15 Jan 2025, 16:00',
-                timeline: {
-                    step1: { status: 'completed', waktu: '15 Jan 2025, 09:30' },
-                    step2: { status: 'completed', waktu: '15 Jan 2025, 11:00' },
-                    step3: { status: 'active', waktu: 'Sedang berlangsung' },
-                    step4: { status: 'pending', waktu: '' },
-                    step5: { status: 'pending', waktu: '' }
-                }
-            },
-            'LDY002': {
-                kode: 'LDY002',
-                status: 'completed',
-                nama: 'Siti Aminah',
-                telepon: '0813-7654-3210',
-                tanggalMasuk: '14 Jan 2025',
-                jamMasuk: '10:15 WIB',
-                layanan: 'Cuci Kering',
-                berat: '2.0 Kg',
-                harga: 'Rp 20.000',
-                estimasi: '14 Jan 2025, 18:00',
-                timeline: {
-                    step1: { status: 'completed', waktu: '14 Jan 2025, 10:15' },
-                    step2: { status: 'completed', waktu: '14 Jan 2025, 12:00' },
-                    step3: { status: 'completed', waktu: '14 Jan 2025, 15:30' },
-                    step4: { status: 'completed', waktu: '14 Jan 2025, 17:45' },
-                    step5: { status: 'pending', waktu: '' }
-                }
-            },
-            'LDY003': {
-                kode: 'LDY003',
-                status: 'pending',
-                nama: 'Ahmad Rizki',
-                telepon: '0814-5678-9012',
-                tanggalMasuk: '15 Jan 2025',
-                jamMasuk: '14:00 WIB',
-                layanan: 'Setrika Saja',
-                berat: '4.0 Kg',
-                harga: 'Rp 24.000',
-                estimasi: '16 Jan 2025, 12:00',
-                timeline: {
-                    step1: { status: 'completed', waktu: '15 Jan 2025, 14:00' },
-                    step2: { status: 'pending', waktu: '' },
-                    step3: { status: 'pending', waktu: '' },
-                    step4: { status: 'pending', waktu: '' },
-                    step5: { status: 'pending', waktu: '' }
-                }
-            }
-        };
-
-        // Status configuration
-        const statusConfig = {
-            pending: {
-                icon: 'bi-hourglass',
-                title: 'Menunggu Antrian',
-                desc: 'Pesanan Anda sedang menunggu antrian untuk diproses',
-                class: 'pending'
-            },
-            processing: {
-                icon: 'bi-hourglass-split',
-                title: 'Sedang Diproses',
-                desc: 'Laundry Anda sedang dalam proses pengerjaan',
-                class: 'processing'
-            },
-            completed: {
-                icon: 'bi-check-circle-fill',
-                title: 'Selesai',
-                desc: 'Laundry Anda sudah selesai dan siap diambil',
-                class: 'completed'
-            },
-            picked: {
-                icon: 'bi-box-seam',
-                title: 'Sudah Diambil',
-                desc: 'Laundry telah diambil oleh customer',
-                class: 'completed'
-            }
-        };
-
-        // Get kode from URL parameter
-        const urlParams = new URLSearchParams(window.location.search);
-        const kode = urlParams.get('kode');
-
-        // Load data
-        window.addEventListener('DOMContentLoaded', function() {
-            if (!kode) {
-                showNotFound();
-                return;
-            }
-
-            // Simulate loading (nanti diganti dengan fetch API)
-            setTimeout(() => {
-                const orderData = dummyData[kode];
-                
-                if (orderData) {
-                    displayOrderData(orderData);
-                } else {
-                    showNotFound();
-                }
-            }, 800);
-        });
-
-        function displayOrderData(data) {
-            // Hide loading, show result
-            document.getElementById('loadingState').style.display = 'none';
-            document.getElementById('resultContent').style.display = 'block';
-
-            // Update status header
-            const config = statusConfig[data.status];
-            const statusIcon = document.getElementById('statusIcon');
-            statusIcon.className = `status-icon ${config.class}`;
-            statusIcon.innerHTML = `<i class="bi ${config.icon}"></i>`;
-            document.getElementById('statusTitle').textContent = config.title;
-            document.getElementById('statusDesc').textContent = config.desc;
-            document.getElementById('orderCode').textContent = data.kode;
-
-            // Update order details
-            document.getElementById('tanggalMasuk').textContent = data.tanggalMasuk;
-            document.getElementById('jamMasuk').textContent = data.jamMasuk;
-            document.getElementById('layanan').textContent = data.layanan;
-            document.getElementById('berat').textContent = data.berat;
-            document.getElementById('harga').textContent = data.harga;
-            document.getElementById('estimasi').textContent = data.estimasi;
-
-            // Update timeline
-            for (let i = 1; i <= 5; i++) {
-                const step = data.timeline[`step${i}`];
-                if (step) {
-                    const element = document.getElementById(`step${i}`);
-                    const timeElement = document.getElementById(`time${i}`);
-                    
-                    element.className = `timeline-item ${step.status}`;
-                    if (timeElement && step.waktu) {
-                        timeElement.textContent = step.waktu;
-                    }
-                }
-            }
-
-            // Update WhatsApp button
-            const waLink = document.getElementById('btnWa');
-            waLink.href = `https://wa.me/6281234567890?text=Halo%20LaundryGo,%20saya%20mau%20tanya%20order%20${data.kode}%20atas%20nama%20${data.nama}`;
-        }
-
-        function showNotFound() {
-            document.getElementById('loadingState').style.display = 'none';
-            document.getElementById('notFoundState').style.display = 'block';
-        }
-    </script>
 
 </body>
 </html>
