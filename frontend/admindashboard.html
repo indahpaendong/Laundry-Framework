@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <!-- viewport: biar responsive di HP, gak bisa zoom-in/out -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#FFD966">
+    <title>LaundryGo - Admin Dashboard</title>
+
+    <!-- Bootstrap CSS: framework buat layout grid & komponen siap pakai -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts: font Poppins biar tampilan lebih modern -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap Icons: icon-icon siap pakai (bi bi-*) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+    <style>
+        /*   VARIABEL WARNA & UKURAN   */
+        /* Biar gampang ganti tema, semua warna disimpan di variable CSS */
+        :root {
+            /* Palette kuning pastel untuk tema LaundryGo */
+            --pastel-yellow-light: #FFF9E6;
+            --pastel-yellow: #FFEEB3;
+            --pastel-yellow-medium: #FFE599;
+            --pastel-yellow-dark: #FFD966;
+            
+            /* Warna teks: primary untuk judul, secondary untuk deskripsi */
+            --text-primary: #5A4A42;
+            --text-secondary: #8B7355;
+            --text-muted: #A8907A;
+            
+            /* Background putih soft, gak terlalu silau */
+            --white-soft: #FFFDF9;
+            
+            /* Warna status: success, warning, info, danger */
+            --success-green: #7FD99B;
+            --success-light: #E8F8EE;
+            --warning-orange: #FFB347;
+            --warning-light: #FFF3E0;
+            --info-blue: #7EC8E3;
+            --info-light: #E8F6FB;
+            --danger-red: #FF8A80;
+            --danger-light: #FFEBE9;
+            
+            /* Shadow halus buat efek kedalaman */
+            --shadow-soft: 0 8px 32px rgba(90, 74, 66, 0.08);
+            --shadow-hover: 0 12px 40px rgba(90, 74, 66, 0.14);
+            --shadow-card: 0 4px 20px rgba(90, 74, 66, 0.07);
+            
+            /* Radius border: lg untuk card, md untuk input, sm untuk tombol */
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 10px;
+            --radius-xs: 6px;
+            
+            /* Animasi transisi halus */
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            
+            /* Ukuran layout */
+            --sidebar-width: 260px;    /* lebar sidebar desktop */
+            --topbar-height: 68px;     /* tinggi header atas */
+            --spacing-md: 1rem;        /* jarak standar */
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+        }
+
+        /* Reset default browser */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        /* Style dasar body */
+        body {
+            font-family: 'Poppins', sans-serif;
+            /* Background gradient kuning pastel */
+            background: linear-gradient(135deg, var(--pastel-yellow-light) 0%, var(--pastel-yellow) 50%, var(--pastel-yellow-medium) 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+            overflow-x: hidden;  /* Mencegah scroll horizontal */
+            line-height: 1.6;
+        }
+
+        /*   SIDEBAR   */
+        /* Sidebar fixed di kiri, full height */
+        .sidebar {
+            position: fixed;
+            top: 0; left: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            /* Background semi-transparan + blur effect */
+            background: rgba(255, 253, 249, 0.92);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255, 233, 153, 0.6);
+            box-shadow: 4px 0 24px rgba(90, 74, 66, 0.07);
+            display: flex;
+            flex-direction: column;
+            z-index: 200;  /* Pastikan di atas konten lain */
+            transition: var(--transition);
+        }
+
+        /* Logo & brand di bagian atas sidebar */
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1.4rem var(--spacing-lg);
+            border-bottom: 1px solid rgba(255, 233, 153, 0.5);
+            text-decoration: none;
+            min-height: var(--topbar-height);
+        }
+
+        /* Icon logo bulat dengan gradient */
+        .brand-icon {
+            width: 38px; height: 38px;
+            background: linear-gradient(135deg, var(--pastel-yellow-dark), var(--pastel-yellow-medium));
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .brand-icon i { font-size: 1.1rem; color: var(--text-primary); }
+
+        .brand-text {
+            font-weight: 700;
+            font-size: 1.15rem;
+            color: var(--text-primary);
+        }
+
+        /* Sub-text "Admin Panel" di bawah nama brand */
+        .brand-text span {
+            font-weight: 400;
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            display: block;
+        }
+
+        /*   INFO ADMIN DI SIDEBAR   */
+        /* Card kecil yang menampilkan nama admin yang login */
+        .sidebar-admin {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem var(--spacing-lg);
+            margin: 0.5rem var(--spacing-md);
+            background: linear-gradient(135deg, var(--pastel-yellow), var(--pastel-yellow-medium));
+            border-radius: var(--radius-md);
+        }
+
+        /* Avatar bulat dengan inisial nama */
+        .admin-avatar {
+            width: 36px; height: 36px;
+            background: var(--pastel-yellow-dark);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+        }
+
+        .admin-name {
+            font-weight: 600;
+            font-size: 0.88rem;
+            color: var(--text-primary);
+        }
+
+        .admin-role {
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+        }
+
+        /*   NAVIGASI SIDEBAR   */
+        .sidebar-nav {
+            flex: 1;  /* Ambil sisa ruang vertikal */
+            padding: 0.5rem var(--spacing-md);
+            overflow-y: auto;  /* Scroll jika menu banyak */
+        }
+
+        /* Label section untuk grouping menu */
+        .nav-label {
+            font-size: 0.68rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 0.75rem 0.75rem 0.5rem;
+        }
+
+        /* Item menu: flex agar icon dan teks sejajar */
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem var(--spacing-md);
+            border-radius: var(--radius-sm);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.92rem;
+            font-weight: 500;
+            transition: var(--transition);
+            margin-bottom: 2px;
+            white-space: nowrap;  /* Mencegah teks turun ke baris baru */
+        }
+
+        .nav-item i {
+            font-size: 1.1rem;
+            width: 22px;
+            text-align: center;
+        }
+
+        /* Efek hover: background kuning muda */
+        .nav-item:hover {
+            background: var(--pastel-yellow);
+            color: var(--text-primary);
+        }
+
+        /* State active: gradient + teks lebih tebal */
+        .nav-item.active {
+            background: linear-gradient(135deg, var(--pastel-yellow-dark), var(--pastel-yellow-medium));
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Badge notifikasi kecil di kanan menu */
+        .nav-badge {
+            margin-left: auto;  /* Dorong ke kanan */
+            background: var(--pastel-yellow-dark);
+            color: var(--text-primary);
+            font-size: 0.68rem;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 999px;
+        }
+
+        /*   TOMBOL LOGOUT   */
+        .sidebar-footer {
+            padding: var(--spacing-md);
+            border-top: 1px solid rgba(255, 233, 153, 0.5);
+        }
+
+        .btn-logout {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: var(--radius-sm);
+            background: var(--danger-light);
+            color: var(--danger-red);
+            border: 1.5px solid rgba(255, 138, 128, 0.3);
+            font-size: 0.88rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .btn-logout:hover {
+            background: var(--danger-red);
+            color: white;
+        }
+
+        /*   MAIN WRAPPER   */
+        /* Konten utama digeser ke kanan sesuai lebar sidebar */
+        .main-wrapper {
+            margin-left: var(--sidebar-width);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /*   TOPBAR / HEADER   */
+        /* Header sticky: tetap di atas saat scroll */
+        .topbar {
+            position: sticky;
+            top: 0;
+            height: var(--topbar-height);
+            background: rgba(255, 253, 249, 0.88);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 233, 153, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 var(--spacing-xl);
+            z-index: 100;
+            gap: var(--spacing-md);
+        }
+
+        .topbar-left { display: flex; align-items: center; gap: var(--spacing-md); }
+
+        /* Tombol hamburger untuk mobile (default hidden) */
+        .btn-menu-toggle {
+            display: none;
+            width: 38px; height: 38px;
+            background: var(--pastel-yellow);
+            border: none;
+            border-radius: var(--radius-sm);
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .page-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+        }
+
+        .page-title span {
+            font-weight: 400;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            display: block;
+        }
+
+        .topbar-right { display: flex; align-items: center; gap: 0.75rem; }
+
+        /* Tanggal hari ini di pojok kanan */
+        .topbar-date {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            background: var(--pastel-yellow-light);
+            padding: 0.3rem 0.9rem;
+            border-radius: 999px;
+            border: 1px solid var(--pastel-yellow-medium);
+        }
+
+        /* Tombol notifikasi dengan dot merah */
+        .topbar-notif {
+            width: 38px; height: 38px;
+            background: var(--pastel-yellow);
+            border: none;
+            border-radius: var(--radius-sm);
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            display: flex; align-items: center; justify-content: center;
+            position: relative;  /* Untuk posisi dot */
+        }
+
+        /* Dot merah indikator notifikasi baru */
+        .notif-dot {
+            position: absolute;
+            top: 6px; right: 6px;
+            width: 8px; height: 8px;
+            background: var(--danger-red);
+            border-radius: 50%;
+            border: 1.5px solid var(--white-soft);
+        }
+
+        /*   CONTENT AREA   */
+        .page-content {
+            flex: 1;
+            padding: var(--spacing-xl);
+        }
+
+        /*   STAT CARDS   */
+        /* Grid 4 kolom untuk kartu statistik */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        /* Card statistik dengan efek hover */
+        .stat-card {
+            background: rgba(255, 253, 249, 0.9);
+            backdrop-filter: blur(12px);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            border: 1px solid rgba(255, 233, 153, 0.5);
+            box-shadow: var(--shadow-card);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);  /* Efek naik sedikit saat hover */
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* Icon di dalam card */
+        .stat-icon {
+            width: 44px; height: 44px;
+            border-radius: var(--radius-sm);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem;
+            margin-bottom: var(--spacing-md);
+        }
+
+        /* Warna icon sesuai jenis card */
+        .stat-card.yellow .stat-icon { background: var(--pastel-yellow); color: var(--text-primary); }
+        .stat-card.green .stat-icon  { background: var(--success-light); color: #3aad6a; }
+        .stat-card.orange .stat-icon { background: var(--warning-light); color: var(--warning-orange); }
+        .stat-card.blue .stat-icon   { background: var(--info-light); color: #3aa0c0; }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+
+        .stat-label {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .stat-change {
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        .stat-change.up { color: #3aad6a; }  /* Hijau untuk kenaikan */
+
+        /*   MAIN CARD / TABEL   */
+        .main-card {
+            background: rgba(255, 253, 249, 0.9);
+            backdrop-filter: blur(12px);
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255, 233, 153, 0.5);
+            box-shadow: var(--shadow-card);
+            overflow: hidden;
+        }
+
+        /* Header card: judul + action buttons */
+        .card-header-custom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--spacing-lg) var(--spacing-xl);
+            border-bottom: 1px solid rgba(255, 233, 153, 0.5);
+            gap: var(--spacing-md);
+            flex-wrap: wrap;  /* Wrap ke bawah di layar kecil */
+        }
+
+        .card-title {
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .card-title i { color: var(--pastel-yellow-dark); }
+
+        .card-subtitle {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .card-actions {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            flex-wrap: wrap;
+        }
+
+        /*   SEARCH INPUT   */
+        .search-wrap { position: relative; }
+        
+        /* Icon search diposisikan absolute di dalam input */
+        .search-wrap i {
+            position: absolute;
+            left: 0.85rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            pointer-events: none;  /* Agar klik tembus ke input */
+        }
+
+        .input-search {
+            background: var(--pastel-yellow-light);
+            border: 1.5px solid var(--pastel-yellow-medium);
+            border-radius: 50px;  /* Bentuk pill */
+            padding: 0.55rem 1rem 0.55rem 2.3rem;  /* Padding kiri lebih besar untuk icon */
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            width: 200px;
+            transition: var(--transition);
+        }
+
+        .input-search:focus {
+            outline: none;
+            border-color: var(--pastel-yellow-dark);
+            background: var(--white-soft);
+            width: 240px;  /* Melebar saat fokus */
+        }
+
+        /*   FILTER SELECT   */
+        .select-filter {
+            background: var(--pastel-yellow-light);
+            border: 1.5px solid var(--pastel-yellow-medium);
+            border-radius: 50px;
+            padding: 0.55rem 1rem;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            appearance: none;  /* Hilangkan style default browser */
+        }
+
+        /*   TOMBOL TAMBAH ORDER   */
+        .btn-tambah {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: linear-gradient(135deg, var(--pastel-yellow-dark), var(--pastel-yellow-medium));
+            color: var(--text-primary);
+            border: none;
+            border-radius: 50px;
+            padding: 0.6rem 1.2rem;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 0.88rem;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .btn-tambah:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        /*   TABEL STYLES   */
+        .table-responsive { overflow-x: auto; }  /* Scroll horizontal di mobile */
+
+        .table-order {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+        }
+
+        /* Header tabel dengan gradient background */
+        .table-order thead tr {
+            background: linear-gradient(135deg, var(--pastel-yellow-light), var(--pastel-yellow));
+            border-bottom: 2px solid rgba(255, 217, 102, 0.4);
+        }
+
+        .table-order thead th {
+            padding: var(--spacing-md) var(--spacing-lg);
+            font-weight: 600;
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            white-space: nowrap;  /* Mencegah header turun baris */
+        }
+
+        .table-order tbody tr {
+            border-bottom: 1px solid rgba(255, 233, 153, 0.35);
+            transition: var(--transition);
+        }
+
+        .table-order tbody tr:hover {
+            background: rgba(255, 233, 153, 0.2);  /* Highlight row saat hover */
+        }
+
+        .table-order tbody td {
+            padding: var(--spacing-md) var(--spacing-lg);
+            vertical-align: middle;
+            color: var(--text-primary);
+        }
+
+        /* Badge kode order */
+        .order-code {
+            font-weight: 700;
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            background: var(--pastel-yellow);
+            padding: 3px 8px;
+            border-radius: var(--radius-xs);
+        }
+
+        /* Cell customer: avatar + nama + no HP */
+        .customer-cell { display: flex; align-items: center; gap: var(--spacing-sm); }
+
+        .customer-avatar {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--pastel-yellow-dark), var(--pastel-yellow-medium));
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700;
+            font-size: 0.78rem;
+            color: var(--text-primary);
+        }
+
+        .customer-name { font-weight: 600; font-size: 0.9rem; }
+        .customer-phone { font-size: 0.76rem; color: var(--text-muted); }
+
+        /* Badge berat dengan icon */
+        .weight-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .price-cell { font-weight: 700; font-size: 0.88rem; }
+        .date-cell { font-size: 0.82rem; color: var(--text-secondary); }
+
+        /*   STATUS BADGES   */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 11px;
+            border-radius: 999px;  /* Pill shape */
+            font-size: 0.76rem;
+            font-weight: 600;
+        }
+
+        .status-badge .dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+        }
+
+        /* Warna status sesuai kondisi */
+        .status-diproses { background: var(--info-light); color: #3aa0c0; }
+        .status-diproses .dot { background: #3aa0c0; }
+
+        .status-dicuci { background: #EEF2FF; color: #6366f1; }
+        .status-dicuci .dot { background: #6366f1; }
+
+        .status-disetrika { background: var(--warning-light); color: var(--warning-orange); }
+        .status-disetrika .dot { background: var(--warning-orange); }
+
+        .status-selesai { background: var(--success-light); color: #3aad6a; }
+        .status-selesai .dot { background: #3aad6a; }
+
+        .status-diantar { background: #F3F0FF; color: #7c3aed; }
+        .status-diantar .dot { background: #7c3aed; }
+
+        /*   ACTION BUTTONS   */
+        .action-group { display: flex; align-items: center; justify-content: center; gap: 6px; }
+
+        .btn-action {
+            width: 32px; height: 32px;
+            border: none;
+            border-radius: var(--radius-xs);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.88rem;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        /* Warna tombol sesuai aksi */
+        .btn-edit { background: var(--pastel-yellow); color: var(--text-primary); }
+        .btn-edit:hover { background: var(--pastel-yellow-dark); }
+
+        .btn-update { background: var(--success-light); color: #3aad6a; }
+        .btn-update:hover { background: var(--success-green); color: white; }
+
+        .btn-delete { background: var(--danger-light); color: var(--danger-red); }
+        .btn-delete:hover { background: var(--danger-red); color: white; }
+
+        /*   TABLE FOOTER / PAGINATION   */
+        .table-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--spacing-md) var(--spacing-xl);
+            border-top: 1px solid rgba(255, 233, 153, 0.4);
+        }
+
+        .table-info { font-size: 0.82rem; color: var(--text-muted); }
+
+        .pagination-custom { display: flex; align-items: center; gap: 5px; }
+
+        .page-btn {
+            width: 32px; height: 32px;
+            border: 1.5px solid var(--pastel-yellow-medium);
+            background: var(--white-soft);
+            border-radius: var(--radius-xs);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+        }
+
+        .page-btn:hover, .page-btn.active {
+            background: var(--pastel-yellow-dark);
+            border-color: var(--pastel-yellow-dark);
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        /*   RESPONSIVE DESIGN   */
+        /* Tablet: sidebar mengecil, stats jadi 2 kolom */
+        @media (max-width: 1199px) {
+            :root { --sidebar-width: 220px; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .topbar-date { display: none; }  /* Sembunyikan tanggal di layar sedang */
+        }
+
+        /* Mobile: sidebar hidden, muncul toggle button */
+        @media (max-width: 991px) {
+            .sidebar { transform: translateX(-100%); }  /* Geser ke kiri layar */
+            .sidebar.open { transform: translateX(0); }  /* Muncul saat ada class 'open' */
+            .main-wrapper { margin-left: 0; }  /* Konten full width */
+            .btn-menu-toggle { display: flex; }  /* Tampilkan tombol hamburger */
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        /* Mobile kecil: layout lebih kompak */
+        @media (max-width: 767px) {
+            .page-content { padding: var(--spacing-md); }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); gap: var(--spacing-sm); }
+            .stat-value { font-size: 1.5rem; }
+            
+            /* Header card jadi vertikal */
+            .card-header-custom { padding: var(--spacing-md); flex-direction: column; align-items: flex-start; }
+            .card-actions { width: 100%; }
+            
+            /* Search input full width */
+            .input-search { width: 100%; }
+            .input-search:focus { width: 100%; }
+            
+            .btn-tambah { width: 100%; justify-content: center; }
+            
+            /* Sembunyikan kolom kurang penting di mobile */
+            .col-hide-sm { display: none; }
+        }
+
+        /* Mobile sangat kecil: stats jadi 1 kolom */
+        @media (max-width: 575px) {
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .stat-card { padding: var(--spacing-md); }
+            .stat-value { font-size: 1.35rem; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!--   SIDEBAR   -->
+    <!-- Sidebar fixed di kiri, berisi navigasi utama -->
+    <aside class="sidebar">
+        <!-- Logo & Brand: link kembali ke homepage -->
+        <a class="sidebar-brand" href="index.html">
+            <div class="brand-icon">
+                <i class="bi bi-basket2-fill"></i>
+            </div>
+            <div class="brand-text">
+                LaundryGo
+                <span>Admin Panel</span>
+            </div>
+        </a>
+
+        <!-- Info admin yang login (data statis untuk demo) -->
+        <div class="sidebar-admin">
+            <div class="admin-avatar">A</div>
+            <div>
+                <div class="admin-name">Admin Utama</div>
+                <div class="admin-role">Administrator</div>
+            </div>
+        </div>
+
+        <!-- Menu navigasi utama -->
+        <nav class="sidebar-nav">
+            <div class="nav-label">Menu Utama</div>
+
+            <!-- Menu aktif: Dashboard -->
+            <a href="#" class="nav-item active">
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <!-- Menu Data Order dengan badge jumlah -->
+            <a href="#" class="nav-item">
+                <i class="bi bi-list-check"></i>
+                <span>Data Order</span>
+                <span class="nav-badge">6</span>
+            </a>
+
+            <!-- Link ke halaman tambah order (nanti bisa dikembangkan) -->
+            <a href="tambah-order.html" class="nav-item">
+                <i class="bi bi-plus-circle-fill"></i>
+                <span>Tambah Order</span>
+            </a>
+        </nav>
+
+        <!-- Tombol logout: redirect ke login.html -->
+        <div class="sidebar-footer">
+            <a href="login.html" class="btn-logout">
+                <i class="bi bi-box-arrow-left"></i>
+                <span>Keluar</span>
+            </a>
+        </div>
+    </aside>
+
+    <!--   MAIN WRAPPER   -->
+    <!-- Wrapper untuk konten utama, digeser sesuai lebar sidebar -->
+    <div class="main-wrapper">
+
+        <!-- Topbar / Header: berisi judul & notifikasi -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <!-- Tombol hamburger untuk toggle sidebar di mobile -->
+                <button class="btn-menu-toggle" id="menuToggle" aria-label="Toggle sidebar">
+                    <i class="bi bi-list"></i>
+                </button>
+                <div class="page-title">
+                    Dashboard Admin
+                    <span>Selamat datang kembali, Admin 👋</span>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <!-- Tanggal hari ini (static, bisa diganti manual atau JS) -->
+                <div class="topbar-date">Selasa, 31 Mar 2026</div>
+                <!-- Tombol notifikasi dengan indikator dot -->
+                <button class="topbar-notif" aria-label="Notifikasi">
+                    <i class="bi bi-bell-fill"></i>
+                    <span class="notif-dot"></span>
+                </button>
+            </div>
+        </header>
+
+        <!--   PAGE CONTENT   -->
+        <main class="page-content">
+
+            <!--   STAT CARDS   -->
+            <!-- Ringkasan data order: 4 kartu statistik -->
+            <div class="stats-grid">
+                <!-- Card Total Order -->
+                <div class="stat-card yellow">
+                    <div class="stat-icon"><i class="bi bi-bag-fill"></i></div>
+                    <div class="stat-value">6</div>
+                    <div class="stat-label">Total Order</div>
+                    <div class="stat-change up"><i class="bi bi-arrow-up-short"></i> Hari ini</div>
+                </div>
+                <!-- Card Selesai -->
+                <div class="stat-card green">
+                    <div class="stat-icon"><i class="bi bi-check-circle-fill"></i></div>
+                    <div class="stat-value">2</div>
+                    <div class="stat-label">Selesai</div>
+                    <div class="stat-change up"><i class="bi bi-arrow-up-short"></i> +2 order</div>
+                </div>
+                <!-- Card Diproses -->
+                <div class="stat-card orange">
+                    <div class="stat-icon"><i class="bi bi-hourglass-split"></i></div>
+                    <div class="stat-value">3</div>
+                    <div class="stat-label">Diproses</div>
+                    <div class="stat-change neutral">Sedang berjalan</div>
+                </div>
+                <!-- Card Pendapatan -->
+                <div class="stat-card blue">
+                    <div class="stat-icon"><i class="bi bi-cash-coin"></i></div>
+                    <div class="stat-value">185k</div>
+                    <div class="stat-label">Pendapatan</div>
+                    <div class="stat-change up"><i class="bi bi-arrow-up-short"></i> Hari ini</div>
+                </div>
+            </div>
+
+            <!--   TABLE CARD   -->
+            <div class="main-card">
+
+                <!-- Header table: judul + filter + tombol aksi -->
+                <div class="card-header-custom">
+                    <div>
+                        <div class="card-title">
+                            <i class="bi bi-table"></i>
+                            Data Order Laundry
+                        </div>
+                        <div class="card-subtitle">Kelola semua pesanan masuk</div>
+                    </div>
+
+                    <div class="card-actions">
+                        <!-- Search input (non-fungsional tanpa JS/backend) -->
+                        <div class="search-wrap">
+                            <i class="bi bi-search"></i>
+                            <input type="text" class="input-search" placeholder="Cari nama / kode...">
+                        </div>
+
+                        <!-- Filter status dropdown -->
+                        <select class="select-filter">
+                            <option value="">Semua Status</option>
+                            <option value="Diproses">Diproses</option>
+                            <option value="Dicuci">Dicuci</option>
+                            <option value="Disetrika">Disetrika</option>
+                            <option value="Selesai">Selesai</option>
+                            <option value="Diantar">Diantar</option>
+                        </select>
+
+                        <!-- Tombol tambah order: link ke halaman form -->
+                        <a href="tambah-order.html" class="btn-tambah">
+                            <i class="bi bi-plus-lg"></i>
+                            Tambah Order
+                        </a>
+                    </div>
+                </div>
+
+                <!--   TABEL DATA ORDER (Static)   -->
+                <div class="table-responsive">
+                    <table class="table-order">
+                        <thead>
+                            <tr>
+                                <th>Kode</th>
+                                <th>Nama Customer</th>
+                                <th>Berat</th>
+                                <th class="col-hide-sm">Harga</th>
+                                <th class="col-hide-sm">Tanggal</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Data dummy untuk demo/testing -->
+                            <!-- Row 1: Budi Santoso - Selesai -->
+                            <tr>
+                                <td><span class="order-code">LDY001</span></td>
+                                <td>
+                                    <div class="customer-cell">
+                                        <div class="customer-avatar">BS</div>
+                                        <div>
+                                            <div class="customer-name">Budi Santoso</div>
+                                            <div class="customer-phone">081234567890</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="weight-badge"><i class="bi bi-speedometer2"></i>3.0 kg</span></td>
+                                <td class="price-cell col-hide-sm">Rp 21.000</td>
+                                <td class="date-cell col-hide-sm">01 Jun 2025</td>
+                                <td>
+                                    <span class="status-badge status-selesai">
+                                        <span class="dot"></span>Selesai
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="action-group">
+                                        <a href="#" class="btn-action btn-edit" title="Edit"><i class="bi bi-pencil-fill"></i></a>
+                                        <a href="#" class="btn-action btn-update" title="Update"><i class="bi bi-arrow-repeat"></i></a>
+                                        <a href="#" class="btn-action btn-delete" title="Hapus"><i class="bi bi-trash3-fill"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- Row 2: Siti Rahayu - Diantar -->
+                            <tr>
+                                <td><span class="order-code">LDY002</span></td>
+                                <td>
+                                    <div class="customer-cell">
+                                        <div class="customer-avatar">SR</div>
+                                        <div>
+                                            <div class="customer-name">Siti Rahayu</div>
+                                            <div class="customer-phone">082345678901</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="weight-badge"><i class="bi bi-speedometer2"></i>2.5 kg</span></td>
+                                <td class="price-cell col-hide-sm">Rp 17.500</td>
+                                <td class="date-cell col-hide-sm">01 Jun 2025</td>
+                                <td>
+                                    <span class="status-badge status-diantar">
+                                        <span class="dot"></span>Diantar
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="action-group">
+                                        <a href="#" class="btn-action btn-edit"><i class="bi bi-pencil-fill"></i></a>
+                                        <a href="#" class="btn-action btn-update"><i class="bi bi-arrow-repeat"></i></a>
+                                        <a href="#" class="btn-action btn-delete"><i class="bi bi-trash3-fill"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- Row 3: Ahmad Fauzi - Diproses -->
+                            <tr>
+                                <td><span class="order-code">LDY003</span></td>
+                                <td>
+                                    <div class="customer-cell">
+                                        <div class="customer-avatar">AF</div>
+                                        <div>
+                                            <div class="customer-name">Ahmad Fauzi</div>
+                                            <div class="customer-phone">083456789012</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="weight-badge"><i class="bi bi-speedometer2"></i>4.0 kg</span></td>
+                                <td class="price-cell col-hide-sm">Rp 28.000</td>
+                                <td class="date-cell col-hide-sm">01 Jun 2025</td>
+                                <td>
+                                    <span class="status-badge status-diproses">
+                                        <span class="dot"></span>Diproses
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="action-group">
+                                        <a href="#" class="btn-action btn-edit"><i class="bi bi-pencil-fill"></i></a>
+                                        <a href="#" class="btn-action btn-update"><i class="bi bi-arrow-repeat"></i></a>
+                                        <a href="#" class="btn-action btn-delete"><i class="bi bi-trash3-fill"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- Row 4: Dewi Lestari - Dicuci -->
+                            <tr>
+                                <td><span class="order-code">LDY004</span></td>
+                                <td>
+                                    <div class="customer-cell">
+                                        <div class="customer-avatar">DL</div>
+                                        <div>
+                                            <div class="customer-name">Dewi Lestari</div>
+                                            <div class="customer-phone">084567890123</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="weight-badge"><i class="bi bi-speedometer2"></i>1.5 kg</span></td>
+                                <td class="price-cell col-hide-sm">Rp 10.500</td>
+                                <td class="date-cell col-hide-sm">01 Jun 2025</td>
+                                <td>
+                                    <span class="status-badge status-dicuci">
+                                        <span class="dot"></span>Dicuci
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="action-group">
+                                        <a href="#" class="btn-action btn-edit"><i class="bi bi-pencil-fill"></i></a>
+                                        <a href="#" class="btn-action btn-update"><i class="bi bi-arrow-repeat"></i></a>
+                                        <a href="#" class="btn-action btn-delete"><i class="bi bi-trash3-fill"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- Row 5: Eko Prasetyo - Disetrika -->
+                            <tr>
+                                <td><span class="order-code">LDY005</span></td>
+                                <td>
+                                    <div class="customer-cell">
+                                        <div class="customer-avatar">EP</div>
+                                        <div>
+                                            <div class="customer-name">Eko Prasetyo</div>
+                                            <div class="customer-phone">085678901234</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="weight-badge"><i class="bi bi-speedometer2"></i>5.0 kg</span></td>
+                                <td class="price-cell col-hide-sm">Rp 35.000</td>
+                                <td class="date-cell col-hide-sm">02 Jun 2025</td>
+                                <td>
+                                    <span class="status-badge status-disetrika">
+                                        <span class="dot"></span>Disetrika
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="action-group">
+                                        <a href="#" class="btn-action btn-edit"><i class="bi bi-pencil-fill"></i></a>
+                                        <a href="#" class="btn-action btn-update"><i class="bi bi-arrow-repeat"></i></a>
+                                        <a href="#" class="btn-action btn-delete"><i class="bi bi-trash3-fill"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- Row 6: Fitri Handayani - Diproses -->
+                            <tr>
+                                <td><span class="order-code">LDY006</span></td>
+                                <td>
+                                    <div class="customer-cell">
+                                        <div class="customer-avatar">FH</div>
+                                        <div>
+                                            <div class="customer-name">Fitri Handayani</div>
+                                            <div class="customer-phone">086789012345</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="weight-badge"><i class="bi bi-speedometer2"></i>2.0 kg</span></td>
+                                <td class="price-cell col-hide-sm">Rp 14.000</td>
+                                <td class="date-cell col-hide-sm">02 Jun 2025</td>
+                                <td>
+                                    <span class="status-badge status-diproses">
+                                        <span class="dot"></span>Diproses
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="action-group">
+                                        <a href="#" class="btn-action btn-edit"><i class="bi bi-pencil-fill"></i></a>
+                                        <a href="#" class="btn-action btn-update"><i class="bi bi-arrow-repeat"></i></a>
+                                        <a href="#" class="btn-action btn-delete"><i class="bi bi-trash3-fill"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Footer table: info jumlah data + pagination -->
+                <div class="table-footer">
+                    <div class="table-info">Menampilkan 6 order</div>
+                    <div class="pagination-custom">
+                        <a href="#" class="page-btn"><i class="bi bi-chevron-left"></i></a>
+                        <a href="#" class="page-btn active">1</a>
+                        <a href="#" class="page-btn">2</a>
+                        <a href="#" class="page-btn"><i class="bi bi-chevron-right"></i></a>
+                    </div>
+                </div>
+
+            </div>
+            <!-- END TABLE CARD -->
+
+        </main>
+    </div>
+    <!-- END MAIN WRAPPER -->
+
+</body>
+</html>
