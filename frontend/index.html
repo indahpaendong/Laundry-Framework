@@ -338,8 +338,8 @@
 
     <!-- ====== NAVBAR ====== -->
     <!-- Header dengan logo dan tombol admin -->
-    <nav class="navbar">
-        <div class="container">
+    <nav class="navbar"> <!-- Navbar Bootstrap -->
+        <div class="container"> <!-- Container untuk layout responsive -->
             <!-- Logo: link ke halaman utama -->
             <a class="navbar-brand" href="index.html">
                 <i class="bi bi-basket2-fill"></i>
@@ -375,7 +375,7 @@
                 <form action="hasil-tracking.html" method="GET">
                     <div class="mb-4">
                         <!-- Input kode order dengan validasi HTML5 -->
-                        <input 
+                        <input  
                             type="text" 
                             name="kode"           /* Nama parameter yang dikirim ke URL */
                             class="form-control" 
@@ -386,12 +386,12 @@
                             required               /* Wajib diisi */
                             autofocus              /* Langsung fokus saat halaman load */
                             style="text-transform: uppercase;"  /* Otomatis huruf besar */
-                        >
+                        ><!-- Input field dengan Bootstrap form-control -->
                     </div>
                     
-                    <!-- Tombol submit -->
+                    <!-- Tombol submit --> <!-- Tombol dengan Bootstrap button classes -->
                     <button type="submit" class="btn-track">
-                        <i class="bi bi-search"></i>
+                        <i class="bi bi-search"></i> <!-- Icon dari Bootstrap Icons -->
                         <span>Cek Status Sekarang</span>
                     </button>
                 </form>

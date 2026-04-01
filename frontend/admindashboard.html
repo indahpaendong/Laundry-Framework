@@ -825,7 +825,7 @@
             <div class="stats-grid">
                 <!-- Card Total Order -->
                 <div class="stat-card yellow">
-                    <div class="stat-icon"><i class="bi bi-bag-fill"></i></div>
+                    <div class="stat-icon"><i class="bi bi-bag-fill"></i></div> <!-- bootstreap total orde -->
                     <div class="stat-value">6</div>
                     <div class="stat-label">Total Order</div>
                     <div class="stat-change up"><i class="bi bi-arrow-up-short"></i> Hari ini</div>
@@ -858,38 +858,22 @@
 
                 <!-- Header table: judul + filter + tombol aksi -->
                 <div class="card-header-custom">
-                    <div>
-                        <div class="card-title">
-                            <i class="bi bi-table"></i>
-                            Data Order Laundry
-                        </div>
-                        <div class="card-subtitle">Kelola semua pesanan masuk</div>
+                <div>
+                    <div class="card-title">
+                        <i class="bi bi-clock-history"></i>
+                        Order Terbaru
                     </div>
-
-                    <div class="card-actions">
-                        <!-- Search input (non-fungsional tanpa JS/backend) -->
-                        <div class="search-wrap">
-                            <i class="bi bi-search"></i>
-                            <input type="text" class="input-search" placeholder="Cari nama / kode...">
-                        </div>
-
-                        <!-- Filter status dropdown -->
-                        <select class="select-filter">
-                            <option value="">Semua Status</option>
-                            <option value="Diproses">Diproses</option>
-                            <option value="Dicuci">Dicuci</option>
-                            <option value="Disetrika">Disetrika</option>
-                            <option value="Selesai">Selesai</option>
-                            <option value="Diantar">Diantar</option>
-                        </select>
-
-                        <!-- Tombol tambah order: link ke halaman form -->
-                        <a href="tambah-order.html" class="btn-tambah">
-                            <i class="bi bi-plus-lg"></i>
-                            Tambah Order
-                        </a>
-                    </div>
+                    <div class="card-subtitle">5 pesanan terakhir • <a href="data-order.html" style="color: var(--pastel-yellow-dark); text-decoration: none; font-weight: 600;">Lihat Semua →</a></div>
                 </div>
+
+                <div class="card-actions">
+                    <!-- Tombol tambah order -->
+                    <a href="tambah-order.html" class="btn-tambah">
+                        <i class="bi bi-plus-lg"></i>
+                        Tambah Order
+                    </a>
+                </div>
+            </div>
 
                 <!--   TABEL DATA ORDER (Static)   -->
                 <div class="table-responsive">
@@ -1052,48 +1036,19 @@
                                 </td>
                             </tr>
 
-                            <!-- Row 6: Fitri Handayani - Diproses -->
-                            <tr>
-                                <td><span class="order-code">LDY006</span></td>
-                                <td>
-                                    <div class="customer-cell">
-                                        <div class="customer-avatar">FH</div>
-                                        <div>
-                                            <div class="customer-name">Fitri Handayani</div>
-                                            <div class="customer-phone">086789012345</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td><span class="weight-badge"><i class="bi bi-speedometer2"></i>2.0 kg</span></td>
-                                <td class="price-cell col-hide-sm">Rp 14.000</td>
-                                <td class="date-cell col-hide-sm">02 Jun 2025</td>
-                                <td>
-                                    <span class="status-badge status-diproses">
-                                        <span class="dot"></span>Diproses
-                                    </span>
-                                </td>
-                                <td>
-                                    <div class="action-group">
-                                        <a href="#" class="btn-action btn-edit"><i class="bi bi-pencil-fill"></i></a>
-                                        <a href="#" class="btn-action btn-update"><i class="bi bi-arrow-repeat"></i></a>
-                                        <a href="#" class="btn-action btn-delete"><i class="bi bi-trash3-fill"></i></a>
-                                    </div>
-                                </td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
 
                 <!-- Footer table: info jumlah data + pagination -->
                 <div class="table-footer">
-                    <div class="table-info">Menampilkan 6 order</div>
-                    <div class="pagination-custom">
-                        <a href="#" class="page-btn"><i class="bi bi-chevron-left"></i></a>
-                        <a href="#" class="page-btn active">1</a>
-                        <a href="#" class="page-btn">2</a>
-                        <a href="#" class="page-btn"><i class="bi bi-chevron-right"></i></a>
-                    </div>
+                <div class="table-info">Menampilkan 5 order terbaru</div>
+                <div class="pagination-custom">
+                    <a href="data-order.html" class="page-btn" style="background: var(--pastel-yellow-dark); border-color: var(--pastel-yellow-dark); color: var(--text-primary); font-weight: 700;">
+                        Lihat Semua <i class="bi bi-arrow-right"></i>
+                    </a>
                 </div>
+            </div>
 
             </div>
             <!-- END TABLE CARD -->
