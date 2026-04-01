@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Order - LaundryGo Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-yellow: #FFD966;
+            --light-yellow: #FFF9E6;
+            --medium-yellow: #FFEEB3;
+            --dark-yellow: #FFE599;
+            --text-primary: #5A4A42;
+            --text-secondary: #8B7355;
+            --white: #FFFFFF;
+            --success: #1cc88a;
+            --warning: #f6c23e;
+            --info: #4e73df;
+            --danger: #e74a3b;
+            --sidebar-width: 280px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--light-yellow) 0%, var(--medium-yellow) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            width: var(--sidebar-width);
+            background: linear-gradient(180deg, var(--white) 0%, var(--light-yellow) 100%);
+            box-shadow: 4px 0 20px rgba(90, 74, 66, 0.1);
+            padding: 2rem 1.5rem;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid var(--medium-yellow);
+            margin-bottom: 2rem;
+        }
+
+        .sidebar-logo {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--primary-yellow), var(--dark-yellow));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .sidebar-title h1 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        .sidebar-title p {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        .admin-profile {
+            background: linear-gradient(135deg, var(--medium-yellow), var(--dark-yellow));
+            border-radius: 16px;
+            padding: 1.25rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .admin-avatar {
+            width: 50px;
+            height: 50px;
+            background: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--primary-yellow);
+            font-size: 1.2rem;
+        }
+
+        .admin-info h3 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .admin-info p {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        .menu-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+            padding-left: 0.5rem;
+        }
+
+        .menu-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .menu-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            border-radius: 12px;
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .menu-link:hover, .menu-link.active {
+            background: linear-gradient(135deg, var(--primary-yellow), var(--dark-yellow));
+            color: var(--text-primary);
+            transform: translateX(5px);
+        }
+
+        .menu-link i {
+            font-size: 1.2rem;
+        }
+
+        .menu-badge {
+            margin-left: auto;
+            background: var(--white);
+            color: var(--primary-yellow);
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .sidebar-footer {
+            position: absolute;
+            bottom: 2rem;
+            left: 1.5rem;
+            right: 1.5rem;
+        }
+
+        .btn-logout {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, #ffe0e0, #ffc9c9);
+            color: var(--danger);
+            border: none;
+            padding: 1rem;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .btn-logout:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(231, 74, 59, 0.3);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            background: var(--white);
+            padding: 1.5rem 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(90, 74, 66, 0.08);
+        }
+
+        .page-title h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .page-title p {
+            color: var(--text-secondary);
+            margin: 0.25rem 0 0 0;
+            font-size: 0.9rem;
+        }
+
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .date-badge {
+            background: var(--light-yellow);
+            padding: 0.6rem 1.25rem;
+            border-radius: 50px;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .notification-btn {
+            width: 45px;
+            height: 45px;
+            background: var(--light-yellow);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: var(--primary-yellow);
+            position: relative;
+            text-decoration: none;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 8px;
+            height: 8px;
+            background: var(--danger);
+            border-radius: 50%;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 1.75rem;
+            box-shadow: 0 4px 20px rgba(90, 74, 66, 0.08);
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-icon {
+            width: 55px;
+            height: 55px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-icon.briefcase {
+            background: linear-gradient(135deg, #fff3cd, #ffe69c);
+        }
+
+        .stat-icon.check {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            color: var(--success);
+        }
+
+        .stat-icon.hourglass {
+            background: linear-gradient(135deg, #fff3cd, #ffe69c);
+            color: var(--warning);
+        }
+
+        .stat-icon.money {
+            background: linear-gradient(135deg, #d1ecf1, #bee5eb);
+            color: var(--info);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-change {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--success);
+        }
+
+        /* Content Card */
+        .content-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(90, 74, 66, 0.08);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .card-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .card-title i {
+            font-size: 1.5rem;
+            color: var(--primary-yellow);
+        }
+
+        .card-title h2 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .card-title p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            padding: 0.75rem 1rem 0.75rem 2.75rem;
+            border: 2px solid var(--medium-yellow);
+            border-radius: 50px;
+            font-size: 0.9rem;
+            width: 250px;
+            background: var(--light-yellow);
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary-yellow);
+            background: var(--white);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        .filter-dropdown {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid var(--medium-yellow);
+            border-radius: 50px;
+            background: var(--white);
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .btn-add {
+            background: linear-gradient(135deg, var(--primary-yellow), var(--dark-yellow));
+            color: var(--text-primary);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .btn-add:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 217, 102, 0.4);
+        }
+
+        /* Table */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table thead {
+            background: var(--light-yellow);
+        }
+
+        .data-table th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .data-table td {
+            padding: 1.25rem 1rem;
+            border-bottom: 1px solid var(--medium-yellow);
+        }
+
+        .data-table tbody tr {
+            transition: background 0.3s;
+        }
+
+        .data-table tbody tr:hover {
+            background: var(--light-yellow);
+        }
+
+        .order-code {
+            background: var(--medium-yellow);
+            padding: 0.4rem 0.75rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: inline-block;
+        }
+
+        .customer-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .customer-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary-yellow), var(--dark-yellow));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+
+        .customer-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .customer-phone {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .weight-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-weight: 500;
+        }
+
+        .price-tag {
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .status-badge {
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .status-selesai {
+            background: rgba(28, 200, 138, 0.15);
+            color: var(--success);
+        }
+
+        .status-diproses {
+            background: rgba(78, 115, 223, 0.15);
+            color: var(--info);
+        }
+
+        .status-diantar {
+            background: rgba(133, 135, 150, 0.15);
+            color: #6c757d;
+        }
+
+        .status-dicuci {
+            background: rgba(246, 194, 62, 0.2);
+            color: #b8860b;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-action {
+            width: 35px;
+            height: 35px;
+            border: none;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .btn-edit {
+            background: linear-gradient(135deg, var(--medium-yellow), var(--dark-yellow));
+            color: var(--text-primary);
+        }
+
+        .btn-update {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            color: var(--success);
+        }
+
+        .btn-delete {
+            background: linear-gradient(135deg, #ffe0e0, #ffc9c9);
+            color: var(--danger);
+        }
+
+        .btn-action:hover {
+            transform: scale(1.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .main-content {
+                margin-left: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .search-box input {
+                width: 100%;
+            }
+            .card-actions {
+                width: 100%;
+            }
+            .data-table {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">🧺</div>
+            <div class="sidebar-title">
+                <h1>LaundryGo</h1>
+                <p>Admin Panel</p>
+            </div>
+        </div>
+
+        <div class="admin-profile">
+            <div class="admin-avatar">A</div>
+            <div class="admin-info">
+                <h3>Admin Utama</h3>
+                <p>Administrator</p>
+            </div>
+        </div>
+
+        <div class="menu-label">Menu Utama</div>
+        
+        <nav class="menu">
+            <div class="menu-item">
+                <a href="admindashboard.html" class="menu-link">
+                    <i class="bi bi-grid-1x2-fill"></i>
+                    <span>Dashboard</span>
+                </a>
+            </div>
+            <div class="menu-item">
+                <a href="data-order.html" class="menu-link active">
+                    <i class="bi bi-list-task"></i>
+                    <span>Data Order</span>
+                    <span class="menu-badge">6</span>
+                </a>
+            </div>
+            <div class="menu-item">
+                <a href="tambah-order.html" class="menu-link">
+                    <i class="bi bi-plus-circle-fill"></i>
+                    <span>Tambah Order</span>
+                </a>
+            </div>
+        </nav>
+
+        <div class="sidebar-footer">
+            <a href="login.html" class="btn-logout">
+                <i class="bi bi-box-arrow-left"></i>
+                Keluar
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <div class="page-title">
+                <h1>Data Order Laundry</h1>
+                <p>Kelola semua pesanan masuk</p>
+            </div>
+            <div class="top-actions">
+                <div class="date-badge">
+                    📅 Selasa, 31 Mar 2026
+                </div>
+                <a href="#" class="notification-btn">
+                    🔔
+                    <span class="notification-badge"></span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon briefcase">💼</div>
+                <div class="stat-value">6</div>
+                <div class="stat-label">Total Order</div>
+                <div class="stat-change">↑ Hari ini</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon check">✓</div>
+                <div class="stat-value">2</div>
+                <div class="stat-label">Selesai</div>
+                <div class="stat-change">↑ +2 order</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon hourglass">⏳</div>
+                <div class="stat-value">3</div>
+                <div class="stat-label">Diproses</div>
+                <div class="stat-label">Sedang berjalan</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon money">💰</div>
+                <div class="stat-value">185k</div>
+                <div class="stat-label">Pendapatan</div>
+                <div class="stat-change">↑ Hari ini</div>
+            </div>
+        </div>
+
+        <!-- Content Card -->
+        <div class="content-card">
+            <div class="card-header">
+                <div class="card-title">
+                    <i class="bi bi-table"></i>
+                    <div>
+                        <h2>Data Order Laundry</h2>
+                        <p>Kelola semua pesanan masuk</p>
+                    </div>
+                </div>
+                <div class="card-actions">
+                    <div class="search-box">
+                        <i class="bi bi-search"></i>
+                        <input type="text" placeholder="Cari nama / kode...">
+                    </div>
+                    <select class="filter-dropdown">
+                        <option>Semua Status</option>
+                        <option>Diproses</option>
+                        <option>Selesai</option>
+                        <option>Diantar</option>
+                    </select>
+                    <a href="tambah-order.html" class="btn-add">
+                        <i class="bi bi-plus-lg"></i>
+                        Tambah Order
+                    </a>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>KODE</th>
+                            <th>NAMA CUSTOMER</th>
+                            <th>BERAT</th>
+                            <th>HARGA</th>
+                            <th>TANGGAL</th>
+                            <th>STATUS</th>
+                            <th>AKSI</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="order-code">LDY001</span></td>
+                            <td>
+                                <div class="customer-info">
+                                    <div class="customer-avatar">BS</div>
+                                    <div>
+                                        <div class="customer-name">Budi Santoso</div>
+                                        <div class="customer-phone">081234567890</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="weight-badge">⚖️ 3.0 kg</span></td>
+                            <td><span class="price-tag">Rp 21.000</span></td>
+                            <td>01 Jun 2025</td>
+                            <td><span class="status-badge status-selesai">● Selesai</span></td>
+                            <td>
+                                <div class="action-buttons">
+                                    <a href="edit-order.html?id=LDY001" class="btn-action btn-edit" title="Edit">✏️</a>
+                                    <a href="update-status.html?id=LDY001" class="btn-action btn-update" title="Update">🔄</a>
+                                    <a href="delete-order.html?id=LDY001" class="btn-action btn-delete" title="Hapus">🗑️</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span class="order-code">LDY002</span></td>
+                            <td>
+                                <div class="customer-info">
+                                    <div class="customer-avatar">SR</div>
+                                    <div>
+                                        <div class="customer-name">Siti Rahayu</div>
+                                        <div class="customer-phone">082345678901</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="weight-badge">⚖️ 2.5 kg</span></td>
+                            <td><span class="price-tag">Rp 17.500</span></td>
+                            <td>01 Jun 2025</td>
+                            <td><span class="status-badge status-diantar">● Diantar</span></td>
+                            <td>
+                                <div class="action-buttons">
+                                    <a href="edit-order.html?id=LDY002" class="btn-action btn-edit" title="Edit">✏️</a>
+                                    <a href="update-status.html?id=LDY002" class="btn-action btn-update" title="Update">🔄</a>
+                                    <a href="delete-order.html?id=LDY002" class="btn-action btn-delete" title="Hapus">🗑️</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span class="order-code">LDY003</span></td>
+                            <td>
+                                <div class="customer-info">
+                                    <div class="customer-avatar">AF</div>
+                                    <div>
+                                        <div class="customer-name">Ahmad Fauzi</div>
+                                        <div class="customer-phone">083456789012</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="weight-badge">⚖️ 4.0 kg</span></td>
+                            <td><span class="price-tag">Rp 28.000</span></td>
+                            <td>01 Jun 2025</td>
+                            <td><span class="status-badge status-diproses">● Diproses</span></td>
+                            <td>
+                                <div class="action-buttons">
+                                    <a href="edit-order.html?id=LDY003" class="btn-action btn-edit" title="Edit">✏️</a>
+                                    <a href="update-status.html?id=LDY003" class="btn-action btn-update" title="Update">🔄</a>
+                                    <a href="delete-order.html?id=LDY003" class="btn-action btn-delete" title="Hapus">🗑️</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span class="order-code">LDY004</span></td>
+                            <td>
+                                <div class="customer-info">
+                                    <div class="customer-avatar">DL</div>
+                                    <div>
+                                        <div class="customer-name">Dewi Lestari</div>
+                                        <div class="customer-phone">084567890123</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="weight-badge">⚖️ 1.5 kg</span></td>
+                            <td><span class="price-tag">Rp 10.500</span></td>
+                            <td>01 Jun 2025</td>
+                            <td><span class="status-badge status-dicuci">● Dicuci</span></td>
+                            <td>
+                                <div class="action-buttons">
+                                    <a href="edit-order.html?id=LDY004" class="btn-action btn-edit" title="Edit">✏️</a>
+                                    <a href="update-status.html?id=LDY004" class="btn-action btn-update" title="Update">🔄</a>
+                                    <a href="delete-order.html?id=LDY004" class="btn-action btn-delete" title="Hapus">🗑️</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+</body>
+</html>
