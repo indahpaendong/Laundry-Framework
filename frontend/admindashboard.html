@@ -703,7 +703,7 @@
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
         }
 
-        /* Mobile kecil: layout lebih kompak */
+        /* Mobile kecil */
         @media (max-width: 767px) {
             .page-content { padding: var(--spacing-md); }
             .stats-grid { grid-template-columns: repeat(2, 1fr); gap: var(--spacing-sm); }
@@ -723,7 +723,7 @@
             .col-hide-sm { display: none; }
         }
 
-        /* Mobile sangat kecil: stats jadi 1 kolom */
+        /* Mobile sangat kecil */
         @media (max-width: 575px) {
             .stats-grid { grid-template-columns: 1fr 1fr; }
             .stat-card { padding: var(--spacing-md); }
@@ -734,10 +734,10 @@
 
 <body>
 
-    <!--   SIDEBAR   -->
-    <!-- Sidebar fixed di kiri, berisi navigasi utama -->
+    <!--   sidebar   -->
+    <!-- sidebar fixed di kiri, berisi navigasi utama -->
     <aside class="sidebar">
-        <!-- Logo & Brand: link kembali ke homepage -->
+        <!-- logo : link kembali ke homepage -->
         <a class="sidebar-brand" href="index.html">
             <div class="brand-icon">
                 <i class="bi bi-basket2-fill"></i>
@@ -748,7 +748,7 @@
             </div>
         </a>
 
-        <!-- Info admin yang login (data statis untuk demo) -->
+        <!-- info admin yang login (data statis untuk demo) -->
         <div class="sidebar-admin">
             <div class="admin-avatar">A</div>
             <div>
@@ -757,24 +757,24 @@
             </div>
         </div>
 
-        <!-- Menu navigasi utama -->
+        <!-- menu utama -->
         <nav class="sidebar-nav">
             <div class="nav-label">Menu Utama</div>
 
-            <!-- Menu aktif: Dashboard -->
+            <!-- menu aktif: dashboard -->
             <a href="#" class="nav-item active">
                 <i class="bi bi-grid-1x2-fill"></i>
                 <span>Dashboard</span>
             </a>
 
-            <!-- Menu Data Order dengan badge jumlah -->
+            <!-- maenu data order dengan badge jumlah -->
             <a href="data-order.html" class="nav-item">
                 <i class="bi bi-list-check"></i>
                 <span>Data Order</span>
                 <span class="nav-badge">6</span>
             </a>
 
-            <!-- Link ke halaman tambah order (nanti bisa dikembangkan) -->
+            <!-- link ke halaman tambah order (nanti bisa dikembangkan) -->
             <a href="tambah-order.html" class="nav-item">
                 <i class="bi bi-plus-circle-fill"></i>
                 <span>Tambah Order</span>
@@ -790,14 +790,14 @@
         </div>
     </aside>
 
-    <!--   MAIN WRAPPER   -->
-    <!-- Wrapper untuk konten utama, digeser sesuai lebar sidebar -->
+    
+    <!-- wrapper untuk konten utama, digeser sesuai lebar sidebar -->
     <div class="main-wrapper">
 
-        <!-- Topbar / Header: berisi judul & notifikasi -->
+        <!-- Topbar / header: berisi judul & notifikasi -->
         <header class="topbar">
             <div class="topbar-left">
-                <!-- Tombol hamburger untuk toggle sidebar di mobile -->
+                <!-- Tombol  toggle sidebar di mobile -->
                 <button class="btn-menu-toggle" id="menuToggle" aria-label="Toggle sidebar">
                     <i class="bi bi-list"></i>
                 </button>
@@ -807,9 +807,9 @@
                 </div>
             </div>
             <div class="topbar-right">
-                <!-- Tanggal hari ini (static, bisa diganti manual atau JS) -->
+                <!-- Tanggal hari ini  -->
                 <div class="topbar-date">Selasa, 31 Mar 2026</div>
-                <!-- Tombol notifikasi dengan indikator dot -->
+                <!-- Tombol notifikasi  -->
                 <button class="topbar-notif" aria-label="Notifikasi">
                     <i class="bi bi-bell-fill"></i>
                     <span class="notif-dot"></span>
@@ -817,34 +817,34 @@
             </div>
         </header>
 
-        <!--   PAGE CONTENT   -->
+        <!--   Pg content-->
         <main class="page-content">
 
-            <!--   STAT CARDS   -->
-            <!-- Ringkasan data order: 4 kartu statistik -->
+            <!--   stat card   -->
+            <!-- ringkasan data order -->
             <div class="stats-grid">
-                <!-- Card Total Order -->
+                <!-- card total order -->
                 <div class="stat-card yellow">
-                    <div class="stat-icon"><i class="bi bi-bag-fill"></i></div> <!-- bootstreap total orde -->
+                    <div class="stat-icon"><i class="bi bi-bag-fill"></i></div> 
                     <div class="stat-value">6</div>
                     <div class="stat-label">Total Order</div>
                     <div class="stat-change up"><i class="bi bi-arrow-up-short"></i> Hari ini</div>
                 </div>
-                <!-- Card Selesai -->
+                <!-- card selesai -->
                 <div class="stat-card green">
                     <div class="stat-icon"><i class="bi bi-check-circle-fill"></i></div>
                     <div class="stat-value">2</div>
                     <div class="stat-label">Selesai</div>
                     <div class="stat-change up"><i class="bi bi-arrow-up-short"></i> +2 order</div>
                 </div>
-                <!-- Card Diproses -->
+                <!-- card diproses -->
                 <div class="stat-card orange">
                     <div class="stat-icon"><i class="bi bi-hourglass-split"></i></div>
                     <div class="stat-value">3</div>
                     <div class="stat-label">Diproses</div>
                     <div class="stat-change neutral">Sedang berjalan</div>
                 </div>
-                <!-- Card Pendapatan -->
+                <!-- card pendapatan -->
                 <div class="stat-card blue">
                     <div class="stat-icon"><i class="bi bi-cash-coin"></i></div>
                     <div class="stat-value">185k</div>
@@ -853,10 +853,10 @@
                 </div>
             </div>
 
-            <!--   TABLE CARD   -->
+            <!--   table card   -->
             <div class="main-card">
 
-                <!-- Header table: judul + filter + tombol aksi -->
+                <!-- header table-->
                 <div class="card-header-custom">
                 <div>
                     <div class="card-title">
@@ -867,7 +867,7 @@
                 </div>
 
                 <div class="card-actions">
-                    <!-- Tombol tambah order -->
+                    <!-- tombol tambah order -->
                     <a href="tambah-order.html" class="btn-tambah">
                         <i class="bi bi-plus-lg"></i>
                         Tambah Order
@@ -875,7 +875,7 @@
                 </div>
             </div>
 
-                <!--   TABEL DATA ORDER (Static)   -->
+                <!--   tabel data order  -->
                 <div class="table-responsive">
                     <table class="table-order">
                         <thead>
@@ -890,8 +890,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Data dummy untuk demo/testing -->
-                            <!-- Row 1: Budi Santoso - Selesai -->
+                            <!-- data dummy  -->
                             <tr>
                                 <td><span class="order-code">LDY001</span></td>
                                 <td>
@@ -920,7 +919,7 @@
                                 </td>
                             </tr>
 
-                            <!-- Row 2: Siti Rahayu - Diantar -->
+                           
                             <tr>
                                 <td><span class="order-code">LDY002</span></td>
                                 <td>
@@ -949,7 +948,7 @@
                                 </td>
                             </tr>
 
-                            <!-- Row 3: Ahmad Fauzi - Diproses -->
+                            
                             <tr>
                                 <td><span class="order-code">LDY003</span></td>
                                 <td>
@@ -978,7 +977,7 @@
                                 </td>
                             </tr>
 
-                            <!-- Row 4: Dewi Lestari - Dicuci -->
+                            
                             <tr>
                                 <td><span class="order-code">LDY004</span></td>
                                 <td>
@@ -1007,7 +1006,7 @@
                                 </td>
                             </tr>
 
-                            <!-- Row 5: Eko Prasetyo - Disetrika -->
+                            
                             <tr>
                                 <td><span class="order-code">LDY005</span></td>
                                 <td>
@@ -1040,7 +1039,7 @@
                     </table>
                 </div>
 
-                <!-- Footer table: info jumlah data + pagination -->
+                <!-- info jumlah data  -->
                 <div class="table-footer">
                 <div class="table-info">Menampilkan 5 order terbaru</div>
                 <div class="pagination-custom">
@@ -1051,11 +1050,11 @@
             </div>
 
             </div>
-            <!-- END TABLE CARD -->
+            
 
         </main>
     </div>
-    <!-- END MAIN WRAPPER -->
+    
 
 </body>
 </html>
