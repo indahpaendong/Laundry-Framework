@@ -6,17 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hasil Tracking - LaundryGo</title>
 
-    <!-- Bootstrap CSS ONLY: framework layout, tanpa JS biar ringan -->
+    <!-- Bootstrap CSS ONLY: framework layout -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Google Fonts: font Poppins biar tampilan modern -->
+    <!-- Google Fonts: font Poppins -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Bootstrap Icons: icon-icon siap pakai (bi bi-*) -->
+    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 
     <style>
-        /* ====== VARIABEL WARNA (biar gampang ganti tema) ====== */
         :root {
-            /* Palette kuning pastel khas LaundryGo */
+            /* Palette kuning pastel */
             --pastel-yellow-light: #FFF9E6;
             --pastel-yellow: #FFEEB3;
             --pastel-yellow-medium: #FFE599;
@@ -52,8 +51,7 @@
             overflow-x: hidden;  /* Mencegah scroll horizontal */
         }
 
-        /* ====== DEKORASI BACKGROUND ====== */
-        /* Circle blur di pojok untuk efek visual aesthetic */
+        /* DEKORASI BACKGROUND */
         body::before,
         body::after {
             content: '';
@@ -68,7 +66,6 @@
         body::after { width: 300px; height: 300px; bottom: -50px; left: -50px; }
 
         /* ====== NAVBAR ====== */
-        /* Navbar dengan efek blur/kaca */
         .navbar {
             padding: 1rem 0;
             position: relative;
@@ -92,13 +89,13 @@
             color: var(--pastel-yellow-dark);
         }
 
-        /* Tombol kembali ke home dengan style rounded */
+        /* Tombol kembali ke home */
         .btn-home {
             background: var(--white-soft);
             color: var(--text-primary);
             border: 2px solid var(--pastel-yellow-dark);
             padding: 0.5rem 1.25rem;
-            border-radius: 50px;  /* Bentuk pill */
+            border-radius: 50px; 
             font-weight: 500;
             font-size: 0.9rem;
             transition: var(--transition);
@@ -123,11 +120,10 @@
             padding: 3rem 0;
         }
 
-        /* ====== CARD HASIL TRACKING ====== */
-        /* Card utama dengan efek glassmorphism */
+        /* CARD HASIL TRACKING (Card utama dengan efek glassmorphism) */
         .result-card {
             background: rgba(255, 253, 249, 0.85);
-            backdrop-filter: blur(20px);  /* Efek blur belakang card */
+            backdrop-filter: blur(20px);  
             border-radius: var(--radius-lg);
             padding: 2.5rem;
             max-width: 700px;  /* Lebar maksimal agar tidak terlalu lebar */
@@ -135,7 +131,7 @@
             margin: 0 auto;  /* Tengah horizontal */
             box-shadow: var(--shadow-soft);
             border: 1px solid rgba(255, 233, 153, 0.6);
-            animation: slideUp 0.6s ease-out;  /* Animasi muncul dari bawah */
+            animation: slideUp 0.6s ease-out;  
         }
 
         /* Keyframe animasi slide up */
@@ -213,7 +209,7 @@
             font-size: 1.1rem;
             color: var(--text-primary);
             margin-top: 1rem;
-            letter-spacing: 2px;  /* Jarak antar huruf */
+            letter-spacing: 2px; 
         }
 
         /* ====== DETAIL PESANAN ====== */
@@ -271,7 +267,7 @@
         /* Container timeline dengan garis vertikal */
         .timeline {
             position: relative;
-            padding-left: 2.5rem;  /* Ruang untuk garis & dot */
+            padding-left: 2.5rem; 
         }
 
         /* Garis vertikal timeline */
@@ -290,7 +286,7 @@
         .timeline-item {
             position: relative;
             padding-bottom: 1.5rem;
-            opacity: 0.5;  /* Step belum aktif lebih pudar */
+            opacity: 0.5; 
             transition: var(--transition);
         }
 
@@ -319,7 +315,7 @@
             height: 20px;
             border-radius: 50%;
             background: var(--pastel-yellow-medium);
-            border: 4px solid var(--white-soft);  /* Efek ring putih */
+            border: 4px solid var(--white-soft); 
             transition: var(--transition);
         }
 
@@ -350,7 +346,7 @@
             font-size: 0.7rem;
             font-weight: bold;
             color: white;
-            opacity: 0;  /* Default hidden */
+            opacity: 0; 
             transition: var(--transition);
         }
 
@@ -467,8 +463,7 @@
 
 <body>
 
-    <!-- ====== NAVBAR ====== -->
-    <!-- Header dengan logo dan tombol kembali -->
+    <!-- NAVBAR (Header dengan logo dan tombol kembali) -->
     <nav class="navbar">
         <div class="container"> <!-- membuat container dan grid -->
             <!-- Logo: link ke halaman utama -->
@@ -484,15 +479,14 @@
         </div>
     </nav>
 
-    <!-- ====== MAIN CONTENT ====== -->
+    <!-- MAIN CONTENT -->
     <main class="main-content">
         <div class="container">
             
-            <!-- ====== CARD HASIL TRACKING ====== -->
+            <!-- CARD HASIL TRACKING -->
             <div class="result-card">
                 
-                <!-- ====== STATUS HEADER ====== -->
-                <!-- Menampilkan status utama order dengan icon animasi -->
+                <!-- STATUS HEADER (Menampilkan status utama order dengan icon animasi) -->
                 <div class="status-header">
                     <!-- Icon besar dengan class 'processing' untuk warna kuning -->
                     <div class="status-icon processing">
@@ -504,7 +498,7 @@
                     <div class="order-code">LDY001</div>
                 </div>
 
-                <!-- ====== DETAIL PESANAN ====== -->
+                <!-- DETAIL PESANAN -->
                 <div class="order-details">
                     
                     <!-- Section: Info dasar pesanan -->
@@ -542,8 +536,7 @@
                         </div>
                     </div>
 
-                    <!-- ====== TIMELINE PROGRESS ====== -->
-                    <!-- Visualisasi step-by-step progress pesanan -->
+                    <!-- TIMELINE PROGRESS (Visualisasi step-by-step progress pesanan) -->
                     <div class="detail-section">
                         <div class="detail-section-title">
                             <i class="bi bi-map"></i>
@@ -588,8 +581,7 @@
                     </div>
                 </div>
 
-                <!-- ====== TOMBOL AKSI ====== -->
-                <!-- Dua tombol: WhatsApp dan cek pesanan lain -->
+                <!-- TOMBOL AKSI (Dua tombol: WhatsApp dan cek pesanan lain) -->
                 <div class="action-buttons"> <!-- buttons groups -->
                     <!-- Link ke WhatsApp admin (API wa.me) -->
                     <a href="https://wa.me/6281234567890" 
@@ -609,7 +601,7 @@
         </div>
     </main>
 
-    <!-- ====== FOOTER ====== -->
+    <!-- FOOTER -->
     <footer class="footer">
         <p><br>
         <a href="#">Butuh bantuan?</a> | <a href="#">Hubungi Kami</a></p>
