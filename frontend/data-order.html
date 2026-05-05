@@ -820,7 +820,7 @@
                                 <th>AKSI</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="orderTableBody">
                             <tr>
                                 <td><span class="order-code">LDY001</span></td>
                                 <td>
@@ -1006,5 +1006,184 @@
         </main>
     </div>
 
+    <script>
+    const defaultOrders = [
+        {
+            kode: 'LDY001',
+            nama: 'Budi Santoso',
+            phone: '081234567890',
+            berat: 3.0,
+            harga: 21000,
+            tanggal: '01 Jun 2025',
+            status: 'Selesai'
+        },
+        {
+            kode: 'LDY002',
+            nama: 'Siti Rahayu',
+            phone: '082345678901',
+            berat: 2.5,
+            harga: 17500,
+            tanggal: '01 Jun 2025',
+            status: 'Diantar'
+        },
+        {
+            kode: 'LDY003',
+            nama: 'Ahmad Fauzi',
+            phone: '083456789012',
+            berat: 4.0,
+            harga: 28000,
+            tanggal: '01 Jun 2025',
+            status: 'Diproses'
+        },
+        {
+            kode: 'LDY004',
+            nama: 'Dewi Lestari',
+            phone: '084567890123',
+            berat: 1.5,
+            harga: 10500,
+            tanggal: '01 Jun 2025',
+            status: 'Dicuci'
+        },
+        {
+            kode: 'LDY005',
+            nama: 'Eko Prasetyo',
+            phone: '085678901234',
+            berat: 5.0,
+            harga: 35000,
+            tanggal: '02 Jun 2025',
+            status: 'Disetrika'
+        },
+        {
+            kode: 'LDY006',
+            nama: 'Fitri Handayani',
+            phone: '086789012345',
+            berat: 2.0,
+            harga: 14000,
+            tanggal: '02 Jun 2025',
+            status: 'Diproses'
+        }
+    ];
+
+    const statusClassMap = {
+        'Diproses': 'status-diproses',
+        'Dicuci': 'status-dicuci',
+        'Disetrika': 'status-disetrika',
+        'Selesai': 'status-selesai',
+        'Diantar': 'status-diantar'
+    };
+
+    function initOrdersStorage() {
+        if (!localStorage.getItem('laundryOrders')) {
+            localStorage.setItem('laundryOrders', JSON.stringify(defaultOrders));
+        }
+    }
+
+    function getOrders() {
+        initOrdersStorage();
+        return JSON.parse(localStorage.getItem('laundryOrders')) || [];
+    }
+
+    function saveOrders(orders) {
+        localStorage.setItem('laundryOrders', JSON.stringify(orders));
+    }
+
+    function getInitials(name) {
+        return name
+            .split(' ')
+            .map(function (word) {
+                return word.charAt(0);
+            })
+            .join('')
+            .substring(0, 2)
+            .toUpperCase();
+    }
+
+    function formatRupiah(angka) {
+        return 'Rp ' + Number(angka).toLocaleString('id-ID');
+    }
+
+    function renderOrders() {
+        const tbody = document.getElementById('orderTableBody');
+        const orders = getOrders();
+
+        tbody.innerHTML = '';
+
+        orders.forEach(function (order) {
+            const statusClass = statusClassMap[order.status] || 'status-diproses';
+
+            tbody.innerHTML += `
+                <tr>
+                    <td><span class="order-code">${order.kode}</span></td>
+                    <td>
+                        <div class="customer-cell">
+                            <div class="customer-avatar">${getInitials(order.nama)}</div>
+                            <div>
+                                <div class="customer-name">${order.nama}</div>
+                                <div class="customer-phone">${order.phone}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td><span class="weight-badge"><i class="bi bi-speedometer2"></i>${order.berat} kg</span></td>
+                    <td class="price-cell">${formatRupiah(order.harga)}</td>
+                    <td class="date-cell">${order.tanggal}</td>
+                    <td>
+                        <span class="status-badge ${statusClass}">
+                            <span class="dot"></span>${order.status}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="action-group">
+                            <button type="button" class="btn-action btn-edit" title="Edit">
+                                <i class="bi bi-pencil-fill"></i>
+                            </button>
+
+                            <button type="button" class="btn-action btn-delete" title="Hapus">
+                                <i class="bi bi-trash3-fill"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        });
+
+        const tableInfo = document.querySelector('.table-info');
+        if (tableInfo) {
+            tableInfo.textContent = 'Menampilkan ' + orders.length + ' order';
+        }
+
+        document.querySelectorAll('.btn-delete').forEach(function (button) {
+            button.addEventListener('click', function () {
+                const row = this.closest('tr');
+                const kode = row.querySelector('.order-code').textContent.trim();
+
+                const yakin = confirm('Yakin ingin menghapus order ' + kode + '?');
+
+                if (yakin) {
+                    let orders = getOrders();
+
+                    orders = orders.filter(function (order) {
+                        return order.kode !== kode;
+                    });
+
+                    saveOrders(orders);
+                    renderOrders();
+
+                    alert('Order ' + kode + ' berhasil dihapus.');
+                }
+            });
+        });
+    }
+
+    renderOrders();
+
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.querySelector('.sidebar');
+
+    if (menuToggle && sidebar) {
+        menuToggle.addEventListener('click', function () {
+            sidebar.classList.toggle('open');
+        });
+    }
+</script>
 </body>
 </html>
