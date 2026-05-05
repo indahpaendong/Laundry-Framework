@@ -65,7 +65,7 @@ CREATE TABLE activity_log (
 -- Password: admin123 (bcrypt)
 -- ==========================================
 INSERT INTO admins (nama, email, password_hash) VALUES 
-('Super Admin', 'admin@laundrygo.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi');
+('Super Admin', 'admin@laundrygo.com', '$2b$10$QMpR0VwwaPX6JepYomjyK.Y5KYfQwYbNrnmvi90k9DK20e7h4ltTu');
 
 -- ==========================================
 -- 6. Seed Data: Dummy Laundry (Testing)
