@@ -5,24 +5,28 @@ const pool = require('../config/db');
 // Public route - tidak perlu login
 router.get('/', async (req, res) => {
   try {
-    const { kode } = req.query;
+    let { kode } = req.query;
 
     if (!kode) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Kode unik wajib diisi' 
+      return res.status(400).json({
+        success: false,
+        message: 'Kode order wajib diisi'
       });
     }
 
+    kode = kode.toUpperCase();
+
     const [rows] = await pool.query(
-      'SELECT kode_unik, nama_pelanggan, jenis_layanan, status, tanggal_masuk, tanggal_selesai FROM laundry WHERE kode_unik = ?',
+      `SELECT id, kode, nama_customer, no_hp, berat, harga, tanggal, status
+       FROM orders
+       WHERE UPPER(kode) = ?`,
       [kode]
     );
 
     if (rows.length === 0) {
-      return res.status(404).json({ 
-        success: false, 
-        message: 'Data laundry tidak ditemukan' 
+      return res.status(404).json({
+        success: false,
+        message: 'Data order tidak ditemukan'
       });
     }
 
@@ -33,9 +37,9 @@ router.get('/', async (req, res) => {
 
   } catch (error) {
     console.error('Track error:', error);
-    res.status(500).json({ 
-      success: false, 
-      message: 'Server error: ' + error.message 
+    res.status(500).json({
+      success: false,
+      message: 'Server error: ' + error.message
     });
   }
 });

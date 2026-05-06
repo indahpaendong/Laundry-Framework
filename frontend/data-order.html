@@ -1006,63 +1006,69 @@
         </main>
     </div>
 
-    <script>
-    const defaultOrders = [
-        {
-            kode: 'LDY001',
-            nama: 'Budi Santoso',
-            phone: '081234567890',
-            berat: 3.0,
-            harga: 21000,
-            tanggal: '01 Jun 2025',
-            status: 'Selesai'
-        },
-        {
-            kode: 'LDY002',
-            nama: 'Siti Rahayu',
-            phone: '082345678901',
-            berat: 2.5,
-            harga: 17500,
-            tanggal: '01 Jun 2025',
-            status: 'Diantar'
-        },
-        {
-            kode: 'LDY003',
-            nama: 'Ahmad Fauzi',
-            phone: '083456789012',
-            berat: 4.0,
-            harga: 28000,
-            tanggal: '01 Jun 2025',
-            status: 'Diproses'
-        },
-        {
-            kode: 'LDY004',
-            nama: 'Dewi Lestari',
-            phone: '084567890123',
-            berat: 1.5,
-            harga: 10500,
-            tanggal: '01 Jun 2025',
-            status: 'Dicuci'
-        },
-        {
-            kode: 'LDY005',
-            nama: 'Eko Prasetyo',
-            phone: '085678901234',
-            berat: 5.0,
-            harga: 35000,
-            tanggal: '02 Jun 2025',
-            status: 'Disetrika'
-        },
-        {
-            kode: 'LDY006',
-            nama: 'Fitri Handayani',
-            phone: '086789012345',
-            berat: 2.0,
-            harga: 14000,
-            tanggal: '02 Jun 2025',
-            status: 'Diproses'
-        }
-    ];
+    <!-- Bootstrap JS untuk modal -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Modal Tambah/Edit Order -->
+<div class="modal fade" id="orderModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 18px;">
+            <div class="modal-header">
+                <h5 class="modal-title" id="orderModalTitle">Tambah Order</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+            </div>
+
+            <form id="orderForm">
+                <div class="modal-body">
+                    <input type="hidden" id="orderId">
+
+                    <div class="mb-3">
+                        <label class="form-label">Nama Customer</label>
+                        <input type="text" id="namaCustomer" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">No HP</label>
+                        <input type="text" id="noHp" class="form-control">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Berat (kg)</label>
+                        <input type="number" id="berat" class="form-control" step="0.1" min="0.1" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Harga</label>
+                       <input type="number" id="harga" class="form-control" min="0" required readonly style="background: var(--pastel-yellow); cursor: not-allowed;">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Tanggal</label>
+                        <input type="date" id="tanggal" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Status</label>
+                        <select id="status" class="form-control">
+                            <option value="Diproses">Diproses</option>
+                            <option value="Dicuci">Dicuci</option>
+                            <option value="Disetrika">Disetrika</option>
+                            <option value="Selesai">Selesai</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-warning">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    const API_URL = 'http://localhost:3000/api/orders';
 
     const statusClassMap = {
         'Diproses': 'status-diproses',
@@ -1072,43 +1078,92 @@
         'Diantar': 'status-diantar'
     };
 
-    function initOrdersStorage() {
-        if (!localStorage.getItem('laundryOrders')) {
-            localStorage.setItem('laundryOrders', JSON.stringify(defaultOrders));
-        }
-    }
+    const tbody = document.getElementById('orderTableBody');
+    const tableInfo = document.querySelector('.table-info');
+    const searchInput = document.querySelector('.input-search');
+    const statusFilter = document.querySelector('.select-filter');
+    const btnTambah = document.querySelector('.btn-tambah');
 
-    function getOrders() {
-        initOrdersStorage();
-        return JSON.parse(localStorage.getItem('laundryOrders')) || [];
-    }
+    const orderModalElement = document.getElementById('orderModal');
+    const orderModal = new bootstrap.Modal(orderModalElement);
+    const orderForm = document.getElementById('orderForm');
 
-    function saveOrders(orders) {
-        localStorage.setItem('laundryOrders', JSON.stringify(orders));
-    }
+    const HARGA_PER_KG = 7000;
+const beratInput = document.getElementById('berat');
+const hargaInput = document.getElementById('harga');
+
+function hitungHargaModal() {
+    const berat = parseFloat(beratInput.value) || 0;
+    hargaInput.value = Math.round(berat * HARGA_PER_KG);
+}
+
+beratInput.addEventListener('input', hitungHargaModal);
+
+    let orders = [];
 
     function getInitials(name) {
-        return name
+        return String(name || '')
             .split(' ')
-            .map(function (word) {
-                return word.charAt(0);
-            })
+            .map(word => word.charAt(0))
             .join('')
             .substring(0, 2)
             .toUpperCase();
     }
 
     function formatRupiah(angka) {
-        return 'Rp ' + Number(angka).toLocaleString('id-ID');
+        return 'Rp ' + Number(angka || 0).toLocaleString('id-ID');
+    }
+
+    function formatTanggal(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('id-ID', {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric'
+        });
+    }
+
+    function formatDateInput(dateString) {
+        const date = new Date(dateString);
+        return date.toISOString().split('T')[0];
+    }
+
+    async function loadOrders() {
+        try {
+            const response = await fetch(API_URL);
+            const result = await response.json();
+
+            if (!result.success) {
+                alert(result.message || 'Gagal mengambil data order');
+                return;
+            }
+
+            orders = result.data;
+            renderOrders();
+            updateStats();
+        } catch (error) {
+            console.error(error);
+            alert('Gagal terhubung ke backend. Pastikan npm run dev masih berjalan.');
+        }
     }
 
     function renderOrders() {
-        const tbody = document.getElementById('orderTableBody');
-        const orders = getOrders();
+        const keyword = searchInput.value.toLowerCase();
+        const selectedStatus = statusFilter.value;
+
+        const filteredOrders = orders.filter(order => {
+            const matchKeyword =
+                order.kode.toLowerCase().includes(keyword) ||
+                order.nama_customer.toLowerCase().includes(keyword);
+
+            const matchStatus = selectedStatus === '' || order.status === selectedStatus;
+
+            return matchKeyword && matchStatus;
+        });
 
         tbody.innerHTML = '';
 
-        orders.forEach(function (order) {
+        filteredOrders.forEach(order => {
             const statusClass = statusClassMap[order.status] || 'status-diproses';
 
             tbody.innerHTML += `
@@ -1116,16 +1171,20 @@
                     <td><span class="order-code">${order.kode}</span></td>
                     <td>
                         <div class="customer-cell">
-                            <div class="customer-avatar">${getInitials(order.nama)}</div>
+                            <div class="customer-avatar">${getInitials(order.nama_customer)}</div>
                             <div>
-                                <div class="customer-name">${order.nama}</div>
-                                <div class="customer-phone">${order.phone}</div>
+                                <div class="customer-name">${order.nama_customer}</div>
+                                <div class="customer-phone">${order.no_hp || '-'}</div>
                             </div>
                         </div>
                     </td>
-                    <td><span class="weight-badge"><i class="bi bi-speedometer2"></i>${order.berat} kg</span></td>
+                    <td>
+                        <span class="weight-badge">
+                            <i class="bi bi-speedometer2"></i>${Number(order.berat).toFixed(1)} kg
+                        </span>
+                    </td>
                     <td class="price-cell">${formatRupiah(order.harga)}</td>
-                    <td class="date-cell">${order.tanggal}</td>
+                    <td class="date-cell">${formatTanggal(order.tanggal)}</td>
                     <td>
                         <span class="status-badge ${statusClass}">
                             <span class="dot"></span>${order.status}
@@ -1133,11 +1192,11 @@
                     </td>
                     <td>
                         <div class="action-group">
-                            <button type="button" class="btn-action btn-edit" title="Edit">
+                            <button type="button" class="btn-action btn-edit" title="Edit" onclick="openEditModal(${order.id})">
                                 <i class="bi bi-pencil-fill"></i>
                             </button>
 
-                            <button type="button" class="btn-action btn-delete" title="Hapus">
+                            <button type="button" class="btn-action btn-delete" title="Hapus" onclick="deleteOrder(${order.id}, '${order.kode}')">
                                 <i class="bi bi-trash3-fill"></i>
                             </button>
                         </div>
@@ -1146,44 +1205,153 @@
             `;
         });
 
-        const tableInfo = document.querySelector('.table-info');
         if (tableInfo) {
-            tableInfo.textContent = 'Menampilkan ' + orders.length + ' order';
+            tableInfo.textContent = 'Menampilkan ' + filteredOrders.length + ' order';
         }
 
-        document.querySelectorAll('.btn-delete').forEach(function (button) {
-            button.addEventListener('click', function () {
-                const row = this.closest('tr');
-                const kode = row.querySelector('.order-code').textContent.trim();
+        const navBadge = document.querySelector('.nav-badge');
+        if (navBadge) {
+            navBadge.textContent = orders.length;
+        }
+    }
 
-                const yakin = confirm('Yakin ingin menghapus order ' + kode + '?');
+    function updateStats() {
+        const totalOrder = orders.length;
+        const selesai = orders.filter(order => order.status === 'Selesai').length;
+        const diproses = orders.filter(order => order.status === 'Diproses').length;
+        const pendapatan = orders.reduce((total, order) => total + Number(order.harga || 0), 0);
 
-                if (yakin) {
-                    let orders = getOrders();
+        const statValues = document.querySelectorAll('.stat-value');
 
-                    orders = orders.filter(function (order) {
-                        return order.kode !== kode;
-                    });
+        if (statValues[0]) statValues[0].textContent = totalOrder;
+        if (statValues[1]) statValues[1].textContent = selesai;
+        if (statValues[2]) statValues[2].textContent = diproses;
+        if (statValues[3]) statValues[3].textContent = Math.round(pendapatan / 1000) + 'k';
+    }
 
-                    saveOrders(orders);
-                    renderOrders();
+    function openAddModal() {
+        document.getElementById('orderModalTitle').textContent = 'Tambah Order';
+        orderForm.reset();
+        document.getElementById('orderId').value = '';
+        document.getElementById('tanggal').value = new Date().toISOString().split('T')[0];
+        document.getElementById('status').value = 'Diproses';
+        document.getElementById('harga').value = 0;
+        orderModal.show();
+    }
 
-                    alert('Order ' + kode + ' berhasil dihapus.');
-                }
+    function openEditModal(id) {
+        const order = orders.find(item => item.id === id);
+
+        if (!order) {
+            alert('Order tidak ditemukan');
+            return;
+        }
+
+        document.getElementById('orderModalTitle').textContent = 'Edit Order';
+        document.getElementById('orderId').value = order.id;
+        document.getElementById('namaCustomer').value = order.nama_customer;
+        document.getElementById('noHp').value = order.no_hp || '';
+        document.getElementById('berat').value = order.berat;
+        document.getElementById('harga').value = order.harga;
+        document.getElementById('tanggal').value = formatDateInput(order.tanggal);
+        document.getElementById('status').value = order.status;
+
+        hitungHargaModal();
+
+        orderModal.show();
+    }
+
+    async function deleteOrder(id, kode) {
+        const yakin = confirm('Yakin ingin menghapus order ' + kode + '?');
+
+        if (!yakin) return;
+
+        try {
+            const response = await fetch(`${API_URL}/${id}`, {
+                method: 'DELETE'
             });
+
+            const result = await response.json();
+
+            if (result.success) {
+                alert('Order berhasil dihapus');
+                loadOrders();
+            } else {
+                alert(result.message || 'Gagal menghapus order');
+            }
+        } catch (error) {
+            console.error(error);
+            alert('Gagal menghapus order');
+        }
+    }
+
+    orderForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const id = document.getElementById('orderId').value;
+
+        const payload = {
+            nama_customer: document.getElementById('namaCustomer').value,
+            no_hp: document.getElementById('noHp').value,
+            berat: document.getElementById('berat').value,
+            harga: document.getElementById('harga').value,
+            tanggal: document.getElementById('tanggal').value,
+            status: document.getElementById('status').value
+        };
+
+        const isEdit = id !== '';
+        const url = isEdit ? `${API_URL}/${id}` : API_URL;
+        const method = isEdit ? 'PUT' : 'POST';
+
+        try {
+            const response = await fetch(url, {
+                method,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                alert(isEdit ? 'Order berhasil diperbarui' : 'Order berhasil ditambahkan');
+                orderModal.hide();
+                loadOrders();
+            } else {
+                alert(result.message || 'Gagal menyimpan order');
+            }
+        } catch (error) {
+            console.error(error);
+            alert('Gagal menyimpan order');
+        }
+    });
+
+    if (btnTambah) {
+        btnTambah.addEventListener('click', function(e) {
+            e.preventDefault();
+            openAddModal();
         });
     }
 
-    renderOrders();
+    if (searchInput) {
+        searchInput.addEventListener('input', renderOrders);
+    }
+
+    if (statusFilter) {
+        statusFilter.addEventListener('change', renderOrders);
+    }
 
     const menuToggle = document.getElementById('menuToggle');
     const sidebar = document.querySelector('.sidebar');
 
     if (menuToggle && sidebar) {
-        menuToggle.addEventListener('click', function () {
+        menuToggle.addEventListener('click', function() {
             sidebar.classList.toggle('open');
         });
     }
+
+    loadOrders();
 </script>
 </body>
 </html>

@@ -9,6 +9,7 @@ router.use(verifyToken);
 router.get('/', laundryController.getAll);
 router.get('/:id', laundryController.getById);
 router.post('/', laundryController.create);
+router.put('/:id', laundryController.update);
 router.put('/:id/status', laundryController.updateStatus);
 router.delete('/:id', laundryController.delete);
 

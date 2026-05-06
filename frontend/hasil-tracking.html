@@ -607,5 +607,114 @@
         <a href="#">Butuh bantuan?</a> | <a href="#">Hubungi Kami</a></p>
     </footer>
 
+<script>
+    const API_TRACK_URL = 'http://localhost:3000/api/track';
+
+    function formatRupiah(angka) {
+        return 'Rp ' + Number(angka || 0).toLocaleString('id-ID');
+    }
+
+    function formatTanggal(dateString) {
+        if (!dateString) return '-';
+
+        const date = new Date(dateString);
+
+        if (isNaN(date.getTime())) {
+            return dateString;
+        }
+
+        return date.toLocaleDateString('id-ID', {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric'
+        });
+    }
+
+    function getStatusText(status) {
+        if (status === 'Selesai') return 'Selesai';
+        if (status === 'Dicuci') return 'Sedang Dicuci';
+        if (status === 'Disetrika') return 'Sedang Disetrika';
+        if (status === 'Diantar') return 'Sedang Diantar';
+        return 'Sedang Diproses';
+    }
+
+    function getStatusDesc(status) {
+        if (status === 'Selesai') return 'Laundry Anda sudah selesai';
+        if (status === 'Dicuci') return 'Laundry Anda sedang dalam proses pencucian';
+        if (status === 'Disetrika') return 'Laundry Anda sedang disetrika';
+        if (status === 'Diantar') return 'Laundry Anda sedang dalam proses pengantaran';
+        return 'Laundry Anda sedang dalam proses pengerjaan';
+    }
+
+    function updateTimeline(status) {
+        const items = document.querySelectorAll('.timeline-item');
+
+        items.forEach(function(item) {
+            item.classList.remove('completed', 'active');
+        });
+
+        let activeIndex = 0;
+
+        if (status === 'Diproses') activeIndex = 1;
+        if (status === 'Dicuci') activeIndex = 1;
+        if (status === 'Disetrika') activeIndex = 2;
+        if (status === 'Diantar') activeIndex = 3;
+        if (status === 'Selesai') activeIndex = 4;
+
+        items.forEach(function(item, index) {
+            if (index < activeIndex) {
+                item.classList.add('completed');
+            } else if (index === activeIndex) {
+                item.classList.add('active');
+            }
+        });
+    }
+
+    async function loadTrackingResult() {
+        const params = new URLSearchParams(window.location.search);
+        const kode = params.get('kode');
+
+        if (!kode) {
+            alert('Kode order tidak ditemukan di URL.');
+            window.location.href = 'index.html';
+            return;
+        }
+
+        try {
+            const response = await fetch(`${API_TRACK_URL}?kode=${encodeURIComponent(kode)}`);
+            const result = await response.json();
+
+            if (!result.success) {
+                alert(result.message || 'Data order tidak ditemukan');
+                window.location.href = 'index.html';
+                return;
+            }
+
+            const order = result.data;
+
+            document.querySelector('.order-code').textContent = order.kode;
+            document.querySelector('.status-header h1').textContent = getStatusText(order.status);
+            document.querySelector('.status-header p').textContent = getStatusDesc(order.status);
+
+            const detailValues = document.querySelectorAll('.detail-value');
+
+            detailValues[0].textContent = formatTanggal(order.tanggal);
+            detailValues[1].textContent = '-';
+            detailValues[2].textContent = 'Laundry';
+            detailValues[3].textContent = Number(order.berat || 0).toFixed(1) + ' Kg';
+            detailValues[4].textContent = formatRupiah(order.harga);
+            detailValues[5].textContent = '-';
+
+            updateTimeline(order.status);
+
+        } catch (error) {
+            console.error(error);
+            alert('Gagal terhubung ke backend. Pastikan npm run dev masih berjalan.');
+        }
+    }
+
+    loadTrackingResult();
+</script>
+
 </body>
 </html>

@@ -104,34 +104,165 @@ exports.create = async (req, res) => {
   }
 };
 
+// Update data laundry lengkap
+exports.update = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { nama_pelanggan, no_hp, jenis_layanan, berat_kg, catatan, status } = req.body;
+
+    // Cek data ada atau tidak
+    const [checkRows] = await pool.query(
+      'SELECT * FROM laundry WHERE id = ?',
+      [id]
+    );
+
+    if (checkRows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'Data laundry tidak ditemukan'
+      });
+    }
+
+    // Validasi input
+    if (!nama_pelanggan || !no_hp || !jenis_layanan || !berat_kg) {
+      return res.status(400).json({
+        success: false,
+        message: 'Nama pelanggan, nomor HP, jenis layanan, dan berat wajib diisi'
+      });
+    }
+
+    const jenisLayananValid = ['cuci_kering', 'cuci_setrika', 'kering_saja', 'express'];
+
+    if (!jenisLayananValid.includes(jenis_layanan)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Jenis layanan tidak valid'
+      });
+    }
+
+    const berat = parseFloat(berat_kg);
+
+    if (berat <= 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Berat laundry harus lebih dari 0'
+      });
+    }
+
+    const harga_total = hitungHarga(jenis_layanan, berat);
+
+    const statusBaru = status || checkRows[0].status;
+
+    await pool.query(
+      `UPDATE laundry 
+       SET nama_pelanggan = ?, 
+           no_hp = ?, 
+           jenis_layanan = ?, 
+           berat_kg = ?, 
+           harga_total = ?, 
+           status = ?, 
+           catatan = ?
+       WHERE id = ?`,
+      [
+        sanitize(nama_pelanggan),
+        no_hp,
+        jenis_layanan,
+        berat,
+        harga_total,
+        statusBaru,
+        catatan || null,
+        id
+      ]
+    );
+
+    const [updatedRows] = await pool.query(
+      'SELECT * FROM laundry WHERE id = ?',
+      [id]
+    );
+
+    res.json({
+      success: true,
+      message: 'Data laundry berhasil diupdate',
+      data: updatedRows[0]
+    });
+
+  } catch (error) {
+    console.error('Update laundry error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Gagal update data: ' + error.message
+    });
+  }
+};
+
 // Update status laundry
 exports.updateStatus = async (req, res) => {
   try {
     const { id } = req.params;
     const { status } = req.body;
 
-    const [result] = await pool.query(
-      'UPDATE laundry SET status = ? WHERE id = ?',
-      [status, id]
-    );
+    const statusValid = [
+      'diterima',
+      'dicuci',
+      'dibilas',
+      'dikeringkan',
+      'disetrika',
+      'selesai'
+    ];
 
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ 
-        success: false, 
-        message: 'Data laundry tidak ditemukan' 
+    if (!statusValid.includes(status)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Status tidak valid'
       });
     }
 
+    const [checkRows] = await pool.query(
+      'SELECT * FROM laundry WHERE id = ?',
+      [id]
+    );
+
+    if (checkRows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'Data laundry tidak ditemukan'
+      });
+    }
+
+    let tanggal_selesai = checkRows[0].tanggal_selesai;
+
+    if (status === 'selesai') {
+      tanggal_selesai = new Date();
+    }
+
+    const [result] = await pool.query(
+      'UPDATE laundry SET status = ?, tanggal_selesai = ? WHERE id = ?',
+      [status, tanggal_selesai, id]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'Data laundry tidak ditemukan'
+      });
+    }
+
+    const [updatedRows] = await pool.query(
+      'SELECT * FROM laundry WHERE id = ?',
+      [id]
+    );
+
     res.json({
       success: true,
-      message: 'Status berhasil diupdate'
+      message: 'Status berhasil diupdate',
+      data: updatedRows[0]
     });
 
   } catch (error) {
     console.error('Update status error:', error);
-    res.status(500).json({ 
-      success: false, 
-      message: 'Gagal update status: ' + error.message 
+    res.status(500).json({
+      success: false,
+      message: 'Gagal update status: ' + error.message
     });
   }
 };
