@@ -80,3 +80,5 @@ INSERT INTO laundry (kode_unik, nama_pelanggan, no_hp, jenis_layanan, berat_kg, 
 -- ==========================================
 SELECT '✅ Database laundrygo berhasil dibuat & siap digunakan!' AS status;
 SHOW TABLES;
+
+$2b$10$4kW3RUieJEhcXo/mAdT2DO3B9WvOhMTLMOrJFs1d1jdPV/6aqzF62
