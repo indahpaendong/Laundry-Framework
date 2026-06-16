@@ -8,9 +8,9 @@ const app = express();
 // ✅ Konfigurasi CORS yang benar
 app.use(cors({
   origin: [
-    'https://vermillion-puppy-ea84e8.netlify.app',  // URL Netlify Anda
-    'http://localhost:5173',  // Untuk development lokal
-    'http://localhost:3000'   // Untuk development lokal
+    'https://vermillion-puppy-ea84e8.netlify.app',
+    'http://localhost:5173',
+    'http://localhost:3000'
   ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],

@@ -1,4 +1,4 @@
-const API_BASE = 'https://laundrygo-backend-production.up.railway.app/api';
+const API_BASE = 'https://laundry-framework-production.up.railway.app/api';
 
 const STORAGE_KEYS = {
     TOKEN: 'laundrygo_token',
