@@ -16,8 +16,20 @@ router.get('/', async (req, res) => {
 
     kode = kode.toUpperCase();
 
+    // ✅ PERBAIKAN: Ambil semua kolom termasuk yang baru
     const [rows] = await pool.query(
-      `SELECT id, kode, nama_customer, no_hp, berat, harga, tanggal, status
+      `SELECT 
+        id, 
+        kode, 
+        nama_customer, 
+        no_hp, 
+        berat, 
+        harga, 
+        tanggal, 
+        estimasi_selesai,
+        layanan,
+        catatan,
+        status
        FROM orders
        WHERE UPPER(kode) = ?`,
       [kode]
