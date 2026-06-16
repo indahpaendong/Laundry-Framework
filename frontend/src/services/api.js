@@ -1,4 +1,4 @@
-const API_BASE = 'http://localhost:3000/api';
+const API_BASE = 'https://laundrygo-backend-production.up.railway.app/api';
 
 const STORAGE_KEYS = {
     TOKEN: 'laundrygo_token',

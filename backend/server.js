@@ -5,7 +5,17 @@ const cors = require('cors');
 const app = express();
 
 // Middleware
-app.use(cors());
+// ✅ Konfigurasi CORS yang benar
+app.use(cors({
+  origin: [
+    'https://vermillion-puppy-ea84e8.netlify.app',  // URL Netlify Anda
+    'http://localhost:5173',  // Untuk development lokal
+    'http://localhost:3000'   // Untuk development lokal
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
