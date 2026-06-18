@@ -8,6 +8,7 @@ const app = express();
 // ✅ Konfigurasi CORS yang benar
 app.use(cors({
   origin: [
+    'https://laundrygofrm.netlify.app',
     'https://vermillion-puppy-ea84e8.netlify.app',
     'http://localhost:5173',
     'http://localhost:3000'
