@@ -4,8 +4,7 @@ const cors = require('cors');
 
 const app = express();
 
-// Middleware
-// ✅ Konfigurasi CORS yang benar
+// ✅ Konfigurasi CORS
 app.use(cors({
   origin: [
     'https://laundrygofrm.netlify.app',
@@ -17,16 +16,15 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const orderRoutes = require('./routes/orderRoutes');
-app.use('/api/orders', orderRoutes);
-
 // Routes
 app.use('/api/auth', require('./routes/auth'));
-app.use('/api/laundry', require('./routes/laundry'));
+app.use('/api/orders', require('./routes/orderRoutes'));
 app.use('/api/track', require('./routes/track'));
+app.use('/api/laundry', require('./routes/laundry'));
 
 // Health check
 app.get('/api', (req, res) => {
@@ -34,6 +32,14 @@ app.get('/api', (req, res) => {
     status: 'LaundryGo API Running', 
     version: '1.0.0',
     timestamp: new Date().toISOString()
+  });
+});
+
+// Root route
+app.get('/', (req, res) => {
+  res.json({ 
+    message: 'LaundryGo Backend API',
+    docs: 'Visit /api for documentation'
   });
 });
 
@@ -49,5 +55,5 @@ app.use((err, req, res, next) => {
 // Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`🚀 Server Express.js berjalan di http://localhost:${PORT}`);
+  console.log(`🚀 Server Express.js berjalan di port ${PORT}`);
 });

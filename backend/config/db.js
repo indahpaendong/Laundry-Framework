@@ -3,9 +3,9 @@ require('dotenv').config();
 
 const pool = mysql.createPool({
   host: process.env.DB_HOST,
-  port: parseInt(process.env.DB_PORT) || 3306,
+  port: parseInt(process.env.DB_PORT) || 48254,
   user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,  // ✅ Sesuai dengan Railway: DB_PASSWORD
+  password: process.env.DB_PASS,
   database: process.env.DB_NAME,
   waitForConnections: true,
   connectionLimit: 10,
@@ -18,15 +18,17 @@ pool.getConnection()
     console.log('✅ Database MySQL terhubung!');
     console.log('📍 Host:', process.env.DB_HOST);
     console.log('📦 Database:', process.env.DB_NAME);
+    console.log('🔌 Port:', process.env.DB_PORT);
     conn.release();
   })
   .catch(err => {
     console.error('❌ Gagal konek database:', err.message);
-    console.error('🔍 Cek variables di Railway:');
-    console.error('  - DB_HOST:', process.env.DB_HOST ? '✅ set' : '❌ NOT SET');
-    console.error('  - DB_USER:', process.env.DB_USER ? '✅ set' : '❌ NOT SET');
-    console.error('  - DB_PASSWORD:', process.env.DB_PASSWORD ? '✅ set' : '❌ NOT SET');
-    console.error('  - DB_NAME:', process.env.DB_NAME ? '✅ set' : '❌ NOT SET');
+    console.error('🔍 Debug info:');
+    console.error('  - DB_HOST:', process.env.DB_HOST || 'NOT SET');
+    console.error('  - DB_PORT:', process.env.DB_PORT || 'NOT SET');
+    console.error('  - DB_USER:', process.env.DB_USER || 'NOT SET');
+    console.error('  - DB_PASS:', process.env.DB_PASS ? '*** SET ***' : 'NOT SET');
+    console.error('  - DB_NAME:', process.env.DB_NAME || 'NOT SET');
   });
 
 module.exports = pool;
